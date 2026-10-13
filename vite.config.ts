@@ -1,7 +1,18 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [],
+  plugins: [
+    {
+      name: 'non-blocking-css',
+      enforce: 'post',
+      transformIndexHtml(html: string) {
+        return html.replace(
+          /<link rel="stylesheet" crossorigin href="([^"]+\.css)">/g,
+          '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
+        );
+      }
+    }
+  ],
   server: {
     port: 5173,
     proxy: {

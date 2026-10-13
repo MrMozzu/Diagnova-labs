@@ -2,9 +2,6 @@
    TESTBUDDY LABS / DIAGNOVA - DESIGN SYSTEM
    Pixel-perfect match to clinical modern healthcare theme
    ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
-
 :root {
   /* Brand Primary & Accents matching reference image */
   --color-primary: #1b449c; /* Deep Trust Royal Blue */
