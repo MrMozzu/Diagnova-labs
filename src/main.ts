@@ -270,7 +270,7 @@ function renderApp() {
 
     <!-- MAIN VIEW CONTAINER -->
     <main class="main-content" id="main-content-view">
-      <!-- Injected by renderRouteView() -->
+      ${getCurrentRouteViewHtml()}
     </main>
 
     <!-- FOOTER -->
@@ -476,7 +476,28 @@ function renderApp() {
   `;
 
   bindGlobalEvents();
-  renderRouteView();
+  bindCurrentRouteEvents();
+  updateCartBadges();
+}
+
+function getCurrentRouteViewHtml(): string {
+  if (currentRoute === 'packages') {
+    return renderPackagesPageView();
+  } else if (currentRoute === 'tests') {
+    return renderTestsPageView();
+  } else {
+    return renderHomePageView();
+  }
+}
+
+function bindCurrentRouteEvents() {
+  if (currentRoute === 'packages') {
+    bindPackagesPageEvents();
+  } else if (currentRoute === 'tests') {
+    bindTestsPageEvents();
+  } else {
+    bindHomePageEvents();
+  }
 }
 
 // ==========================================================================
@@ -496,17 +517,8 @@ function renderRouteView() {
     }
   });
 
-  if (currentRoute === 'packages') {
-    container.innerHTML = renderPackagesPageView();
-    bindPackagesPageEvents();
-  } else if (currentRoute === 'tests') {
-    container.innerHTML = renderTestsPageView();
-    bindTestsPageEvents();
-  } else {
-    container.innerHTML = renderHomePageView();
-    bindHomePageEvents();
-  }
-
+  container.innerHTML = getCurrentRouteViewHtml();
+  bindCurrentRouteEvents();
   updateCartBadges();
 }
 
@@ -783,7 +795,7 @@ function renderHomePageView(): string {
 
         <!-- Tests Cards Grid -->
         <div class="tests-catalog-grid" id="tests-grid-container">
-          <!-- Injected by renderCatalogTests() -->
+          ${getCatalogTestsHtml()}
         </div>
 
         <!-- Pagination Controls -->
@@ -1495,13 +1507,13 @@ function renderTestsPageView(): string {
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <span class="page-indicator" id="catalog-count-badge">Loading tests...</span>
+          <span class="page-indicator" id="catalog-count-badge">Showing 1–9 of ${ALL_TESTS.length} tests</span>
           <span style="font-size: 0.8rem; color: #64748b;">Click <strong>+ Add</strong> to book multiple tests together</span>
         </div>
 
         <!-- TESTS GRID -->
         <div class="tests-catalog-grid" id="tests-grid-container">
-          <!-- Injected by renderCatalogTests() -->
+          ${getCatalogTestsHtml()}
         </div>
 
         <!-- PAGINATION CONTROLS -->
@@ -1565,16 +1577,44 @@ function renderPackageCard(pkg: PackageItem): string {
     </div>
   `;
 }
-function renderCatalogTests() {
-  const container = document.getElementById('tests-grid-container');
-  const countBadge = document.getElementById('catalog-count-badge');
-  const prevBtn = document.getElementById('btn-prev-page') as HTMLButtonElement;
-  const nextBtn = document.getElementById('btn-next-page') as HTMLButtonElement;
-  const pageIndicator = document.getElementById('page-indicator-text');
+function renderTestCatalogCard(test: TestItem): string {
+  const isInCart = store.isInCart(test.id);
 
-  if (!container) return;
+  return `
+    <div class="test-catalog-card" data-test-id="${test.id}">
+      <span class="test-cat-tag">${test.category}</span>
+      <h3 class="test-title">${test.name}</h3>
+      <p class="test-desc">${test.shortDesc}</p>
+      
+      <div class="test-meta-pills">
+        <span class="meta-pill">Sample: ${test.sampleType}</span>
+        <span class="meta-pill ${test.fastingRequired ? 'fasting' : ''}">
+          ${test.fastingRequired ? `${test.fastingHours}h Fasting` : 'No Fasting'}
+        </span>
+        <span class="meta-pill tat">${test.tatHours}h Report</span>
+      </div>
 
-  // Filter tests by search & category
+      <div class="test-card-footer">
+        <div class="test-price-box">
+          <span class="test-current-price">₹ ${test.price.toLocaleString('en-IN')}</span>
+          <span class="test-mrp-price">₹ ${test.mrp.toLocaleString('en-IN')}</span>
+          <span class="badge-discount">${test.discountPercent}% OFF</span>
+        </div>
+
+        <div class="card-buttons-row">
+          <button class="btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}">
+            ${isInCart ? '✓ Added' : '+ Add'}
+          </button>
+          <button class="btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
+            Book Now
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function getFilteredAndSortedTests(): TestItem[] {
   let filtered = ALL_TESTS.filter(test => {
     const matchesSearch = !searchQuery || 
       test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1604,7 +1644,6 @@ function renderCatalogTests() {
     return matchesSearch && matchesCategory;
   });
 
-  // Sort tests
   if (selectedSort === 'price-low') {
     filtered.sort((a, b) => a.price - b.price);
   } else if (selectedSort === 'price-high') {
@@ -1615,6 +1654,42 @@ function renderCatalogTests() {
     filtered.sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0));
   }
 
+  return filtered;
+}
+
+function getCatalogTestsHtml(): string {
+  const filtered = getFilteredAndSortedTests();
+  const totalItems = filtered.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginated = filtered.slice(startIndex, startIndex + pageSize);
+
+  if (paginated.length === 0) {
+    return `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #f8fafc; border-radius: 16px; border: 1px dashed #cbd5e1;">
+        <span style="font-size: 2.5rem; display: block; margin-bottom: 12px;">🔍</span>
+        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 6px;">No tests found matching "${escapeHtml(searchQuery)}"</h3>
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 16px;">Try adjusting your keyword or reset filters to explore our full 1000+ catalog.</p>
+        <button class="btn-pill-primary" id="btn-reset-catalog-filter" style="padding: 8px 20px; font-size: 0.85rem;">Reset Filters</button>
+      </div>
+    `;
+  }
+
+  return paginated.map(test => renderTestCatalogCard(test)).join('');
+}
+
+function renderCatalogTests() {
+  const container = document.getElementById('tests-grid-container');
+  const countBadge = document.getElementById('catalog-count-badge');
+  const prevBtn = document.getElementById('btn-prev-page') as HTMLButtonElement;
+  const nextBtn = document.getElementById('btn-next-page') as HTMLButtonElement;
+  const pageIndicator = document.getElementById('page-indicator-text');
+
+  if (!container) return;
+
+  const filtered = getFilteredAndSortedTests();
   const totalItems = filtered.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
   if (currentPage > totalPages) currentPage = totalPages;
@@ -1633,16 +1708,11 @@ function renderCatalogTests() {
   if (prevBtn) prevBtn.disabled = currentPage <= 1;
   if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
 
-  if (paginated.length === 0) {
-    container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #f8fafc; border-radius: 16px; border: 1px dashed #cbd5e1;">
-        <span style="font-size: 2.5rem; display: block; margin-bottom: 12px;">🔍</span>
-        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 6px;">No tests found matching "${searchQuery}"</h3>
-        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 16px;">Try adjusting your keyword or reset filters to explore our full 1000+ catalog.</p>
-        <button class="btn-pill-primary" id="btn-reset-catalog-filter" style="padding: 8px 20px; font-size: 0.85rem;">Reset Filters</button>
-      </div>
-    `;
-    document.getElementById('btn-reset-catalog-filter')?.addEventListener('click', () => {
+  container.innerHTML = getCatalogTestsHtml();
+
+  const resetBtn = document.getElementById('btn-reset-catalog-filter');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
       searchQuery = '';
       selectedCategory = 'All';
       currentPage = 1;
@@ -1650,45 +1720,7 @@ function renderCatalogTests() {
       if (input) input.value = '';
       renderCatalogTests();
     });
-    return;
   }
-
-  container.innerHTML = paginated.map(test => {
-    const isInCart = store.isInCart(test.id);
-
-    return `
-      <div class="test-catalog-card" data-test-id="${test.id}">
-        <span class="test-cat-tag">${test.category}</span>
-        <h3 class="test-title">${test.name}</h3>
-        <p class="test-desc">${test.shortDesc}</p>
-        
-        <div class="test-meta-pills">
-          <span class="meta-pill">Sample: ${test.sampleType}</span>
-          <span class="meta-pill ${test.fastingRequired ? 'fasting' : ''}">
-            ${test.fastingRequired ? `${test.fastingHours}h Fasting` : 'No Fasting'}
-          </span>
-          <span class="meta-pill tat">${test.tatHours}h Report</span>
-        </div>
-
-        <div class="test-card-footer">
-          <div class="test-price-box">
-            <span class="test-current-price">₹ ${test.price.toLocaleString('en-IN')}</span>
-            <span class="test-mrp-price">₹ ${test.mrp.toLocaleString('en-IN')}</span>
-            <span class="badge-discount">${test.discountPercent}% OFF</span>
-          </div>
-
-          <div class="card-buttons-row">
-            <button class="btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}">
-              ${isInCart ? '✓ Added' : '+ Add'}
-            </button>
-            <button class="btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
 
   bindTestCardEvents();
 }
@@ -3677,11 +3709,9 @@ function bindHomePageEvents() {
   // Callback modal button
   document.getElementById('open-callback-modal-btn')?.addEventListener('click', openCallbackModal);
 
-  // Bind Package Cards events (+ Add to Cart, Book Now, Person Selector)
+  // Bind Package Cards & Test Cards events
   bindPackageCardEvents();
-
-  // Initial render of tests in catalog section
-  renderCatalogTests();
+  bindTestCardEvents();
 }
 
 function updateDropdownSelection(items: NodeListOf<Element>) {
@@ -3767,7 +3797,7 @@ function bindTestsPageEvents() {
     document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  renderCatalogTests();
+  bindTestCardEvents();
 }
 
 function bindPackageCardEvents() {

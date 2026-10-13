@@ -3,13 +3,25 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [
     {
-      name: 'non-blocking-css',
+      name: 'inline-css-plugin',
+      apply: 'build',
       enforce: 'post',
-      transformIndexHtml(html: string) {
-        return html.replace(
-          /<link rel="stylesheet" crossorigin href="([^"]+\.css)">/g,
-          '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
-        );
+      generateBundle(_options, bundle) {
+        let cssContent = '';
+        for (const [key, asset] of Object.entries(bundle)) {
+          if (key.endsWith('.css') && asset.type === 'asset' && typeof asset.source === 'string') {
+            cssContent += asset.source;
+            delete bundle[key];
+          }
+        }
+        for (const [key, chunk] of Object.entries(bundle)) {
+          if (key === 'index.html' && chunk.type === 'asset' && typeof chunk.source === 'string') {
+            let html = chunk.source;
+            html = html.replace(/<link[^>]*rel=["'](stylesheet|preload)["'][^>]*href=["'][^"']*\.css["'][^>]*>/g, '');
+            html = html.replace(/<noscript><link[^>]*href=["'][^"']*\.css["'][^>]*><\/noscript>/g, '');
+            chunk.source = html.replace('</head>', `<style>${cssContent}</style></head>`);
+          }
+        }
       }
     }
   ],
