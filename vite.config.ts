@@ -40,7 +40,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 700,
     modulePreload: {
       resolveDependencies: (_filename, deps) => {
-        return deps.filter(dep => !dep.includes('pdf') && !dep.includes('jspdf') && !dep.includes('html2canvas') && !dep.includes('confetti') && !dep.includes('purify') && !dep.includes('canvg'));
+        return deps.filter(dep => !dep.includes('pdf') && !dep.includes('jspdf') && !dep.includes('html2canvas') && !dep.includes('confetti') && !dep.includes('purify') && !dep.includes('canvg') && !dep.includes('drawers'));
       }
     }
   }
