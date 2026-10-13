@@ -568,7 +568,8 @@ function renderHomePageView(): string {
           <div class="hero-image-wrapper">
             <picture>
               <source srcset="/hero-doctor.webp" type="image/webp">
-              <img src="/hero-doctor.jpg" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
+              <source srcset="/hero-doctor.jpg" type="image/jpeg">
+              <img src="/hero-doctor.webp" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
             </picture>
             <div class="hero-floating-quote">
               <div class="quote-badge-icon">
@@ -1051,7 +1052,8 @@ function renderHomePageView(): string {
           <div class="how-phone-mockup-wrapper">
             <picture>
               <source srcset="/phone-report.webp" type="image/webp">
-              <img src="/phone-report.jpg" alt="Your Report is Ready" class="how-phone-img" width="240" height="321" loading="lazy" decoding="async" />
+              <source srcset="/phone-report.jpg" type="image/jpeg">
+              <img src="/phone-report.webp" alt="Your Report is Ready" class="how-phone-img" width="240" height="321" loading="lazy" decoding="async" />
             </picture>
           </div>
         </div>
