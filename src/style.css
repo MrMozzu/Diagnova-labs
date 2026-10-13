@@ -7000,10 +7000,11 @@ a.btn-card-book-now:active,
     font-size: 11px !important;
   }
 
-  /* Catalog Directory */
+  /* Catalog Directory - High-Density 2-Column Mobile Grid */
   .tests-catalog-grid {
-    grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 
   .catalog-search-bar-row {
@@ -7046,26 +7047,256 @@ a.btn-card-book-now:active,
   }
 
   .test-catalog-card {
-    padding: 16px !important;
+    padding: 12px 10px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+
+  .test-catalog-card:active {
+    transform: scale(0.98) !important;
+  }
+
+  .test-cat-tag {
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.2px !important;
+    margin-bottom: 3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  .test-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 32px !important;
+    word-break: break-word !important;
+  }
+
+  .test-desc {
+    display: none !important; /* Clean e-commerce mobile pattern like 1mg/Pharmeasy */
+  }
+
+  .test-meta-pills {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .meta-pill {
+    font-size: 9.5px !important;
+    padding: 2px 5px !important;
+    border-radius: 4px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
   }
 
   .test-card-footer {
     display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding-top: 8px !important;
+    border-top: 1px solid #f1f5f9 !important;
+    margin-top: auto !important;
+  }
+
+  .test-price-box {
+    display: flex !important;
+    align-items: baseline !important;
     flex-wrap: wrap !important;
-    gap: 10px !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .test-current-price {
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+  }
+
+  .test-mrp-price {
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    text-decoration: line-through !important;
+  }
+
+  .badge-discount {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    color: #16a34a !important;
+    background: #dcfce7 !important;
+    padding: 1px 4px !important;
+    border-radius: 3px !important;
+  }
+
+  .card-buttons-row {
+    display: flex !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .card-buttons-row .btn-add-cart {
+    flex: 1 1 50% !important;
+    height: 32px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 4px !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
 
-  .card-buttons-row .btn-add-cart,
   .card-buttons-row .btn-book-test-sm {
-    height: 38px !important;
-    font-size: 12.5px !important;
-    padding: 0 10px !important;
+    flex: 1 1 50% !important;
+    height: 32px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 0 4px !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
 
-  /* Health Risks & Why Choose Us */
-  .health-risks-grid,
+  /* Health Risks Horizontal Swipe Shelf (Native 60fps CSS Scroll Snap) */
+  .health-risks-section {
+    margin-bottom: 36px !important;
+    overflow: hidden !important;
+  }
+
+  .health-risks-section .section-subheading-text {
+    font-size: 13px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .health-risks-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding-top: 4px !important;
+    padding-bottom: 14px !important;
+    padding-left: 2px !important;
+    padding-right: 16px !important;
+    margin-left: 0 !important;
+    margin-right: -12px !important;
+    scrollbar-width: none !important;
+  }
+
+  .health-risks-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .health-risks-grid .risk-card {
+    flex: 0 0 250px !important;
+    width: 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: normal !important;
+    box-sizing: border-box !important;
+    padding: 16px 14px !important;
+    border-radius: 16px !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+  }
+
+  .health-risks-grid .risk-card-header {
+    margin-bottom: 10px !important;
+  }
+
+  .health-risks-grid .risk-icon-box {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+  }
+
+  .health-risks-grid .risk-icon-box svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .health-risks-grid .risk-badge {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+    border-radius: 9999px !important;
+  }
+
+  .health-risks-grid .risk-title {
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+    line-height: 1.25 !important;
+  }
+
+  .health-risks-grid .risk-desc {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    color: #64748b !important;
+    margin-bottom: 10px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .health-risks-grid .risk-key-tests {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .health-risks-grid .risk-test-tag {
+    font-size: 10.5px !important;
+    padding: 2px 7px !important;
+    border-radius: 6px !important;
+  }
+
+  .health-risks-grid .risk-card-footer {
+    margin-top: auto !important;
+  }
+
+  .health-risks-grid .btn-risk-explore {
+    height: 38px !important;
+    font-size: 12px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+
   .why-choose-grid {
     grid-template-columns: 1fr !important;
     gap: 14px !important;
@@ -7655,14 +7886,42 @@ a.btn-card-book-now:active,
     grid-template-columns: 1fr !important;
   }
 
+  .tests-catalog-grid {
+    gap: 6px !important;
+  }
+
+  .test-catalog-card {
+    padding: 10px 6px !important;
+  }
+
+  .test-title {
+    font-size: 12px !important;
+    min-height: 28px !important;
+  }
+
+  .card-buttons-row .btn-add-cart,
+  .card-buttons-row .btn-book-test-sm {
+    height: 30px !important;
+    font-size: 10px !important;
+    padding: 0 2px !important;
+  }
+
+  .health-risks-grid .risk-card {
+    flex: 0 0 230px !important;
+    width: 230px !important;
+    min-width: 230px !important;
+    max-width: 230px !important;
+  }
+
   .test-card-footer {
     flex-direction: column !important;
-    align-items: flex-start !important;
+    align-items: stretch !important;
   }
 
   .card-buttons-row {
     width: 100% !important;
-    justify-content: space-between !important;
+    display: flex !important;
+    gap: 4px !important;
   }
 
   .footer-col-app {
