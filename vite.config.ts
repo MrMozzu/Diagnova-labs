@@ -35,29 +35,12 @@ export default defineConfig({
     }
   },
   build: {
-    target: 'es2020',
+    target: 'es2022',
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 700,
     modulePreload: {
       resolveDependencies: (_filename, deps) => {
-        return deps.filter(dep => !dep.includes('vendor-pdf') && !dep.includes('pdfGenerator') && !dep.includes('vendor-confetti'));
-      }
-    },
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('jspdf') || id.includes('html2canvas')) {
-              return 'vendor-pdf';
-            }
-            if (id.includes('canvas-confetti')) {
-              return 'vendor-confetti';
-            }
-            if (id.includes('lucide')) {
-              return 'vendor-icons';
-            }
-          }
-        }
+        return deps.filter(dep => !dep.includes('pdf') && !dep.includes('jspdf') && !dep.includes('html2canvas') && !dep.includes('confetti') && !dep.includes('purify') && !dep.includes('canvg'));
       }
     }
   }
