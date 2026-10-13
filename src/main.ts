@@ -3933,14 +3933,6 @@ window.addEventListener('hashchange', () => {
   renderRouteView();
 });
 
-// Auto-run Geolocation on initial load
-setTimeout(() => {
-  store.detectBrowserLocation().then((res) => {
-    currentCity = res.city;
-    updateCityInUI();
-  });
-}, 800);
-
 // Initialize
 syncRouteFromHash();
 const preRenderedCatalog = document.getElementById('tests-grid-container');
