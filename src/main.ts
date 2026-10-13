@@ -566,8 +566,10 @@ function renderHomePageView(): string {
         <!-- HERO RIGHT VISUAL -->
         <div class="hero-visual">
           <div class="hero-image-wrapper">
-            <div class="hero-image-glow-bg"></div>
-            <img src="/hero-doctor.jpg" alt="Pathologist Scientist" class="hero-doctor-img" />
+            <picture>
+              <source srcset="/hero-doctor.webp" type="image/webp">
+              <img src="/hero-doctor.jpg" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
+            </picture>
             <div class="hero-floating-quote">
               <div class="quote-badge-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -1047,7 +1049,10 @@ function renderHomePageView(): string {
 
           <!-- Phone mockup -->
           <div class="how-phone-mockup-wrapper">
-            <img src="/phone-report.jpg" alt="Your Report is Ready" class="how-phone-img" />
+            <picture>
+              <source srcset="/phone-report.webp" type="image/webp">
+              <img src="/phone-report.jpg" alt="Your Report is Ready" class="how-phone-img" width="240" height="321" loading="lazy" decoding="async" />
+            </picture>
           </div>
         </div>
       </div>

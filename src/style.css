@@ -1210,6 +1210,7 @@ img {
 .hero-doctor-img {
   width: 100%;
   height: 100%;
+  aspect-ratio: 440 / 480;
   object-fit: cover;
   object-position: center top;
 }
@@ -4201,6 +4202,8 @@ svg {
    ========================================================================== */
 .how-it-works-section {
   margin-bottom: 64px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .how-it-works-grid {
@@ -4290,7 +4293,9 @@ svg {
 
 .how-phone-img {
   max-width: 240px;
+  width: 100%;
   height: auto;
+  aspect-ratio: 240 / 321;
   border-radius: 24px;
   box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
   object-fit: cover;
@@ -4303,6 +4308,8 @@ svg {
 .trusted-banner-section {
   margin-top: 48px;
   margin-bottom: 64px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
 }
 
 .trusted-banner-inner {
@@ -4422,6 +4429,8 @@ svg {
   border-top: 1px solid #edf2f7;
   padding-top: 56px;
   padding-bottom: 28px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 450px;
 }
 
 .footer-grid {
@@ -5112,6 +5121,8 @@ svg {
   border-bottom: 1px solid #edf2f7;
   padding: 64px 0;
   margin-bottom: 64px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 550px;
 }
 
 .why-choose-header-center {

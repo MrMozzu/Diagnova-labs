@@ -15,6 +15,11 @@ export default defineConfig({
     target: 'es2020',
     cssCodeSplit: true,
     chunkSizeWarningLimit: 600,
+    modulePreload: {
+      resolveDependencies: (_filename, deps) => {
+        return deps.filter(dep => !dep.includes('vendor-pdf') && !dep.includes('pdfGenerator') && !dep.includes('vendor-confetti'));
+      }
+    },
     rollupOptions: {
       output: {
         manualChunks(id) {
