@@ -1,0 +1,6 @@
+# robots.txt for Diagnova Labs (https://diagnova-labs.vercel.app)
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://diagnova-labs.vercel.app/sitemap.xml
