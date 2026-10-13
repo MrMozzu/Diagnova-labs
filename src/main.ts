@@ -3943,4 +3943,13 @@ setTimeout(() => {
 
 // Initialize
 syncRouteFromHash();
-renderApp();
+const preRenderedCatalog = document.getElementById('tests-grid-container');
+if (currentRoute === 'home' && preRenderedCatalog) {
+  // Shell & home view already pre-rendered into index.html; preserve DOM & native LCP element
+  bindGlobalEvents();
+  bindCurrentRouteEvents();
+  updateCartBadges();
+} else {
+  renderApp();
+}
+
