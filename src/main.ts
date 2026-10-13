@@ -567,8 +567,9 @@ function renderHomePageView(): string {
         <div class="hero-visual">
           <div class="hero-image-wrapper">
             <picture>
-              <source srcset="/hero-doctor.webp" type="image/webp">
-              <source srcset="/hero-doctor.jpg" type="image/jpeg">
+              <source type="image/avif" srcset="/hero-doctor-sm.avif 400w, /hero-doctor.avif 800w" sizes="(max-width: 640px) 290px, 440px">
+              <source type="image/webp" srcset="/hero-doctor-sm.webp 400w, /hero-doctor.webp 800w" sizes="(max-width: 640px) 290px, 440px">
+              <source type="image/jpeg" srcset="/hero-doctor-sm.jpg 400w, /hero-doctor.jpg 800w" sizes="(max-width: 640px) 290px, 440px">
               <img src="/hero-doctor.webp" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
             </picture>
             <div class="hero-floating-quote">
@@ -1051,8 +1052,9 @@ function renderHomePageView(): string {
           <!-- Phone mockup -->
           <div class="how-phone-mockup-wrapper">
             <picture>
-              <source srcset="/phone-report.webp" type="image/webp">
-              <source srcset="/phone-report.jpg" type="image/jpeg">
+              <source type="image/avif" srcset="/phone-report.avif">
+              <source type="image/webp" srcset="/phone-report.webp">
+              <source type="image/jpeg" srcset="/phone-report.jpg">
               <img src="/phone-report.webp" alt="Your Report is Ready" class="how-phone-img" width="240" height="321" loading="lazy" decoding="async" />
             </picture>
           </div>
