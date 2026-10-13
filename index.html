@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> Diagnova | Better Health Starts With Better Diagnosis</title>
     <meta name="description" content="Book Healthy India 2026 Full Body Checkup, Be Healthy Comprehensive packages, and essential clinical blood tests online with 60-minute doorstep sample collection. Fast, accurate, and NABL accredited." />
-    <!-- Preload LCP hero image with responsive srcset -->
-    <link rel="preload" as="image" href="/hero-doctor.webp" type="image/webp" imagesrcset="/hero-doctor-sm.webp 400w, /hero-doctor.webp 800w" imagesizes="(max-width: 640px) 290px, 440px" fetchpriority="high" />
+    <!-- Preload LCP hero image with responsive srcset (AVIF format) -->
+    <link rel="preload" as="image" href="/hero-doctor.avif" type="image/avif" imagesrcset="/hero-doctor-sm.avif 400w, /hero-doctor.avif 800w" imagesizes="(max-width: 640px) 290px, 440px" fetchpriority="high" />
     <!-- Google Fonts: Non-render-blocking font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,62 @@
     </noscript>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <header class="site-header" id="site-header">
+        <div class="container header-inner">
+          <a href="#/" class="brand-logo" id="brand-logo-btn">
+            <div class="logo-symbol">
+              <span class="sq-navy"></span>
+              <span class="sq-orange"></span>
+              <span class="sq-sky"></span>
+              <span class="sq-cyan"></span>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">DIAGNOVA</span>
+            </div>
+          </a>
+        </div>
+      </header>
+      <main class="main-content" id="main-content-view">
+        <section class="hero-section" id="hero-section">
+          <div class="container hero-grid">
+            <div class="hero-content">
+              <div class="hero-kicker">ACCURATE &nbsp;|&nbsp; RELIABLE &nbsp;|&nbsp; ALWAYS FOR YOU</div>
+              <h1 class="hero-title">
+                Better Health Starts With<br />
+                <span class="hero-title-highlight">Better Diagnosis</span>
+              </h1>
+              <p class="hero-description">
+                Trusted diagnostic tests, expert analysis and convenient home sample collection – all in one place.
+              </p>
+              <div class="hero-action-row">
+                <button class="btn-hero-primary" id="hero-book-btn">Book a Test</button>
+                <a href="#packages-section" class="btn-hero-outline" id="hero-packages-btn">View Packages</a>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="hero-image-wrapper">
+                <picture>
+                  <source type="image/avif" srcset="/hero-doctor-sm.avif 400w, /hero-doctor.avif 800w" sizes="(max-width: 640px) 290px, 440px">
+                  <source type="image/webp" srcset="/hero-doctor-sm.webp 400w, /hero-doctor.webp 800w" sizes="(max-width: 640px) 290px, 440px">
+                  <source type="image/jpeg" srcset="/hero-doctor-sm.jpg 400w, /hero-doctor.jpg 800w" sizes="(max-width: 640px) 290px, 440px">
+                  <img src="/hero-doctor.avif" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
+                </picture>
+                <div class="hero-floating-quote">
+                  <div class="quote-badge-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                  <div class="quote-content">
+                    <span class="quote-title">NABL Accredited</span>
+                    <span class="quote-sub">10M+ Trusted Checks</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

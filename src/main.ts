@@ -582,7 +582,7 @@ function renderHomePageView(): string {
               <source type="image/avif" srcset="/hero-doctor-sm.avif 400w, /hero-doctor.avif 800w" sizes="(max-width: 640px) 290px, 440px">
               <source type="image/webp" srcset="/hero-doctor-sm.webp 400w, /hero-doctor.webp 800w" sizes="(max-width: 640px) 290px, 440px">
               <source type="image/jpeg" srcset="/hero-doctor-sm.jpg 400w, /hero-doctor.jpg 800w" sizes="(max-width: 640px) 290px, 440px">
-              <img src="/hero-doctor.webp" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
+              <img src="/hero-doctor.avif" alt="Pathologist Scientist" class="hero-doctor-img" width="440" height="480" fetchpriority="high" decoding="async" />
             </picture>
             <div class="hero-floating-quote">
               <div class="quote-badge-icon">
