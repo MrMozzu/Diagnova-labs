@@ -1,5 +1,5 @@
 import type { Booking, CallbackLead, PatientInfo, CartItem } from '../types';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { getSupabase } from '../lib/supabase';
 import { PricingService } from './pricing.service';
 import { ValidationService } from './validation.service';
 import { SlotService } from './slot.service';
@@ -188,7 +188,8 @@ class AppStore {
   }
 
   public async getAllBookings(): Promise<Booking[]> {
-    if (isSupabaseConfigured && supabase) {
+    const supabase = await getSupabase();
+    if (supabase) {
       try {
         const { data, error } = await supabase
           .from('bookings')
@@ -327,7 +328,8 @@ class AppStore {
     safeStorage.setItem(LOCAL_STORAGE_BOOKINGS_KEY, JSON.stringify(existing));
 
     // Async sync to Supabase if configured
-    if (isSupabaseConfigured && supabase) {
+    const supabase = await getSupabase();
+    if (supabase) {
       try {
         // Insert patient first
         const { data: patientRecord } = await supabase
@@ -385,7 +387,8 @@ class AppStore {
       safeStorage.setItem(LOCAL_STORAGE_BOOKINGS_KEY, JSON.stringify(list));
     }
 
-    if (isSupabaseConfigured && supabase) {
+    const supabase = await getSupabase();
+    if (supabase) {
       try {
         await supabase
           .from('bookings')
@@ -429,7 +432,8 @@ class AppStore {
     existing.unshift(newLead);
     safeStorage.setItem(LOCAL_STORAGE_CALLBACKS_KEY, JSON.stringify(existing));
 
-    if (isSupabaseConfigured && supabase) {
+    const supabase = await getSupabase();
+    if (supabase) {
       try {
         await supabase.from('callbacks').insert({
           customer_name: params.customerName,

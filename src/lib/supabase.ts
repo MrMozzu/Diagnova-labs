@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -10,12 +10,15 @@ export const isSupabaseConfigured = Boolean(
   !supabaseAnonKey.includes('your-anon-public-key')
 );
 
-export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+let cachedClient: SupabaseClient | null = null;
 
-if (isSupabaseConfigured) {
-  console.log('⚡ [TestBuddyLabs] Connected to Supabase Cloud PostgreSQL!');
-} else {
-  console.info('ℹ️ [TestBuddyLabs] Supabase credentials not set yet. Running in high-speed local persistence mode. To connect live PostgreSQL, add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.');
+export async function getSupabase(): Promise<SupabaseClient | null> {
+  if (!isSupabaseConfigured) return null;
+  if (!cachedClient) {
+    const { createClient } = await import('@supabase/supabase-js');
+    cachedClient = createClient(supabaseUrl!, supabaseAnonKey!);
+    console.log('⚡ [TestBuddyLabs] Connected to Supabase Cloud PostgreSQL!');
+  }
+  return cachedClient;
 }
+
