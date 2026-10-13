@@ -546,15 +546,17 @@ function renderHomePageView(): string {
           <div class="hero-search-wrapper" id="hero-search-wrapper">
             <div class="hero-search-bar" id="hero-search-bar">
               <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <label for="hero-search-input" class="sr-only">Search tests, packages or health concerns</label>
               <input 
                 type="text" 
                 id="hero-search-input" 
                 class="hero-search-input" 
                 placeholder="Search tests, packages or health concerns" 
+                aria-label="Search tests, packages or health concerns"
                 value="${searchQuery}"
                 autocomplete="off"
               />
-              <button class="hero-search-clear-btn" id="hero-search-clear-btn" style="display: ${searchQuery ? 'flex' : 'none'};">✕</button>
+              <button class="hero-search-clear-btn" id="hero-search-clear-btn" aria-label="Clear search" style="display: ${searchQuery ? 'flex' : 'none'};">✕</button>
               <button class="hero-search-arrow-btn" id="hero-search-btn" aria-label="Search">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
@@ -768,16 +770,19 @@ function renderHomePageView(): string {
         <div class="catalog-search-bar-row">
           <div class="catalog-search-box">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <label for="catalog-search-field" class="sr-only">Search tests by condition, organ, or keyword</label>
             <input 
               type="text" 
               id="catalog-search-field" 
               class="catalog-search-input" 
               placeholder="Search tests by condition, organ, or keyword (e.g., Glucose, CBC, Creatinine)..." 
+              aria-label="Search tests by condition, organ, or keyword"
               value="${searchQuery}" 
             />
           </div>
 
-          <select class="catalog-sort-select" id="catalog-sort-select">
+          <label for="catalog-sort-select" class="sr-only">Sort diagnostic tests</label>
+          <select class="catalog-sort-select" id="catalog-sort-select" aria-label="Sort diagnostic tests">
             <option value="popular" ${selectedSort === 'popular' ? 'selected' : ''}>Most Popular</option>
             <option value="price-low" ${selectedSort === 'price-low' ? 'selected' : ''}>Price: Low to High</option>
             <option value="price-high" ${selectedSort === 'price-high' ? 'selected' : ''}>Price: High to Low</option>
@@ -1480,16 +1485,19 @@ function renderTestsPageView(): string {
         <div class="catalog-search-bar-row">
           <div class="catalog-search-box">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <label for="catalog-search-field" class="sr-only">Search by test name, symptom, or biomarker</label>
             <input 
               type="text" 
               id="catalog-search-field" 
               class="catalog-search-input" 
               placeholder="Search by test name, symptom, or biomarker (e.g., Glucose, CBC, Lipid)..." 
+              aria-label="Search by test name, symptom, or biomarker"
               value="${searchQuery}" 
             />
           </div>
 
-          <select class="catalog-sort-select" id="catalog-sort-select">
+          <label for="catalog-sort-select" class="sr-only">Sort diagnostic tests</label>
+          <select class="catalog-sort-select" id="catalog-sort-select" aria-label="Sort diagnostic tests">
             <option value="popular" ${selectedSort === 'popular' ? 'selected' : ''}>Most Popular</option>
             <option value="price-low" ${selectedSort === 'price-low' ? 'selected' : ''}>Price: Low to High</option>
             <option value="price-high" ${selectedSort === 'price-high' ? 'selected' : ''}>Price: High to Low</option>
@@ -2162,29 +2170,29 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
       </p>
 
       <div class="form-group">
-        <label class="form-label">Full Name (as per Aadhaar / ID) *</label>
+        <label class="form-label" for="patient-name">Full Name (as per Aadhaar / ID) *</label>
         <input type="text" id="patient-name" class="form-input" placeholder="e.g., Rajesh Sharma" value="Rajesh Sharma" required />
       </div>
 
       <div class="drawer-form-grid-2col">
         <div class="form-group">
-          <label class="form-label">Mobile Number *</label>
+          <label class="form-label" for="patient-phone">Mobile Number *</label>
           <input type="tel" id="patient-phone" class="form-input" placeholder="10-digit number" value="9826011223" required />
         </div>
         <div class="form-group">
-          <label class="form-label">Email (for Report) *</label>
+          <label class="form-label" for="patient-email">Email (for Report) *</label>
           <input type="email" id="patient-email" class="form-input" placeholder="rajesh@gmail.com" value="rajesh@gmail.com" />
         </div>
       </div>
 
       <div class="drawer-form-grid-2col">
         <div class="form-group">
-          <label class="form-label">Age (Years) *</label>
+          <label class="form-label" for="patient-age">Age (Years) *</label>
           <input type="number" id="patient-age" class="form-input" placeholder="Age" value="38" min="1" max="120" required />
         </div>
         <div class="form-group">
-          <label class="form-label">Gender *</label>
-          <select id="patient-gender" class="form-input">
+          <label class="form-label" for="patient-gender">Gender *</label>
+          <select id="patient-gender" class="form-input" aria-label="Gender">
             <option value="Male" selected>Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -2209,8 +2217,8 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
       </p>
 
       <div class="form-group">
-        <label class="form-label">Preferred Date *</label>
-        <select id="booking-date-select" class="form-input">
+        <label class="form-label" for="booking-date-select">Preferred Date *</label>
+        <select id="booking-date-select" class="form-input" aria-label="Preferred Date">
           ${dateOptions.map(d => `
             <option value="${d.iso}">${d.display} (${d.iso})</option>
           `).join('')}
@@ -2262,22 +2270,22 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
       </p>
 
       <div class="form-group">
-        <label class="form-label">Full Street Address &amp; Flat / House No. *</label>
+        <label class="form-label" for="patient-address">Full Street Address &amp; Flat / House No. *</label>
         <textarea id="patient-address" class="form-input" rows="3" placeholder="e.g., Flat 402, Shalimar Heights, Arera Colony" required>Flat 402, Shalimar Heights, Arera Colony</textarea>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Landmark (Optional)</label>
+        <label class="form-label" for="patient-landmark">Landmark (Optional)</label>
         <input type="text" id="patient-landmark" class="form-input" placeholder="e.g., Near Habibganj Station" value="Near Habibganj Station" />
       </div>
 
       <div class="drawer-form-grid-2col">
         <div class="form-group">
-          <label class="form-label">City *</label>
+          <label class="form-label" for="patient-city">City *</label>
           <input type="text" id="patient-city" class="form-input" value="${currentCity}" required />
         </div>
         <div class="form-group">
-          <label class="form-label">Pincode *</label>
+          <label class="form-label" for="patient-pincode">Pincode *</label>
           <input type="text" id="patient-pincode" class="form-input" placeholder="e.g., 462016" value="462016" maxlength="6" required />
         </div>
       </div>
@@ -2679,11 +2687,11 @@ function openLocationModal() {
 
           <!-- Hyperlocal Pincode Checker (Healthians Spec) -->
           <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">
+            <label for="modal-pincode-input" style="display: block; font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">
               📍 Check Service by PIN Code
             </label>
             <div style="display: flex; gap: 8px;">
-              <input type="text" id="modal-pincode-input" placeholder="e.g. 462016" maxlength="6" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; outline: none;" />
+              <input type="text" id="modal-pincode-input" placeholder="e.g. 462016" maxlength="6" aria-label="Check Service by PIN Code" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; outline: none;" />
               <button id="modal-check-pin-btn" class="btn-pill-primary" style="padding: 0 16px; height: 38px; font-size: 0.8rem;">Check</button>
             </div>
             <div id="modal-pincode-result" style="margin-top: 8px; display: none;"></div>
@@ -2800,17 +2808,17 @@ function openCallbackModal() {
 
           <form id="callback-lead-form">
             <div class="form-group">
-              <label class="form-label">Your Name *</label>
+              <label class="form-label" for="lead-name">Your Name *</label>
               <input type="text" id="lead-name" class="form-input" placeholder="e.g., Ananya Verma" required />
             </div>
 
             <div class="form-group">
-              <label class="form-label">Phone Number *</label>
+              <label class="form-label" for="lead-phone">Phone Number *</label>
               <input type="tel" id="lead-phone" class="form-input" placeholder="10-digit number" required />
             </div>
 
             <div class="form-group">
-              <label class="form-label">Health Concern / Symptoms (Optional)</label>
+              <label class="form-label" for="lead-query">Health Concern / Symptoms (Optional)</label>
               <textarea id="lead-query" class="form-input" rows="2" placeholder="e.g., Doctor advised blood test for fatigue, diabetes checkup"></textarea>
             </div>
 

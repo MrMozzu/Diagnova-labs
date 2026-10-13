@@ -212,15 +212,17 @@
           <div class="hero-search-wrapper" id="hero-search-wrapper">
             <div class="hero-search-bar" id="hero-search-bar">
               <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <label for="hero-search-input" class="sr-only">Search tests, packages or health concerns</label>
               <input 
                 type="text" 
                 id="hero-search-input" 
                 class="hero-search-input" 
                 placeholder="Search tests, packages or health concerns" 
+                aria-label="Search tests, packages or health concerns"
                 value=""
                 autocomplete="off"
               />
-              <button class="hero-search-clear-btn" id="hero-search-clear-btn" style="display: none;">✕</button>
+              <button class="hero-search-clear-btn" id="hero-search-clear-btn" aria-label="Clear search" style="display: none;">✕</button>
               <button class="hero-search-arrow-btn" id="hero-search-btn" aria-label="Search">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
@@ -542,16 +544,19 @@
         <div class="catalog-search-bar-row">
           <div class="catalog-search-box">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <label for="catalog-search-field" class="sr-only">Search tests by condition, organ, or keyword</label>
             <input 
               type="text" 
               id="catalog-search-field" 
               class="catalog-search-input" 
               placeholder="Search tests by condition, organ, or keyword (e.g., Glucose, CBC, Creatinine)..." 
+              aria-label="Search tests by condition, organ, or keyword"
               value="" 
             />
           </div>
 
-          <select class="catalog-sort-select" id="catalog-sort-select">
+          <label for="catalog-sort-select" class="sr-only">Sort diagnostic tests</label>
+          <select class="catalog-sort-select" id="catalog-sort-select" aria-label="Sort diagnostic tests">
             <option value="popular" selected>Most Popular</option>
             <option value="price-low" >Price: Low to High</option>
             <option value="price-high" >Price: High to Low</option>
