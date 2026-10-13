@@ -10,7 +10,8 @@
     "test": "vitest run --pool=threads",
     "server": "tsx server/index.ts",
     "dev:server": "tsx watch server/index.ts",
-    "dev:all": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"npm run dev\" \"npm run server\""
+    "dev:all": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"npm run dev\" \"npm run server\"",
+    "deploy": "npm run build && wrangler deploy"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -22,7 +23,8 @@
     "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.3",
+    "wrangler": "^4.149.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
