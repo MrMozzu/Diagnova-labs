@@ -9,9 +9,14 @@ import { showToast } from '../utils/toast';
 const packagePersons: Record<string, number> = {
   'pkg-healthy-india-2026': 1,
   'pkg-be-healthy-comprehensive': 1,
+  'pkg-diabetic-checkup-prime': 1,
+  'pkg-life-maximiser-plus-male': 1,
+  'pkg-life-maximiser-male': 1,
+  'pkg-summer-wellness-male': 1,
+  'pkg-cancer-screening-female': 1,
+  'pkg-cancer-screening-male': 1,
   'pkg-senior-citizen': 1,
-  'pkg-women-wellness': 1,
-  'pkg-diabetic-care': 1
+  'pkg-women-wellness': 1
 };
 
 // Checkout Drawer State

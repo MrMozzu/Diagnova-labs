@@ -103,8 +103,8 @@ describe('Enterprise Backend API - Full Stack Integration Suite', () => {
             itemId: 'pkg-healthy-india-2026',
             name: 'Full Body Checkup',
             category: 'Package',
-            price: 1999,
-            mrp: 3499,
+            price: 1099,
+            mrp: 2499,
             persons: 1,
             fastingHours: 10
           }
@@ -117,7 +117,7 @@ describe('Enterprise Backend API - Full Stack Integration Suite', () => {
       expect(res.body.success).toBe(true);
       expect(res.body.data.collectionFee).toBe(0); // >= 500 threshold
       expect(res.body.data.expressFee).toBe(150);
-      expect(res.body.data.totalAmount).toBe(1999 + 150);
+      expect(res.body.data.totalAmount).toBe(1099 + 150);
     });
   });
 
@@ -148,7 +148,7 @@ describe('Enterprise Backend API - Full Stack Integration Suite', () => {
       scheduledDate: dateStr,
       scheduledSlot: '07:00 AM - 08:00 AM (Fasting Preferred)',
       isExpress: false,
-      totalAmount: 1999, // Canonical price
+      totalAmount: 1099, // Canonical price
       paymentMethod: 'cash_on_collection',
       patient: {
         fullName: 'Vikramaditya Rao',
@@ -189,7 +189,7 @@ describe('Enterprise Backend API - Full Stack Integration Suite', () => {
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
       expect(res.body.data.id).toMatch(/^TBL-\d{6}$/);
-      expect(res.body.data.totalAmount).toBe(1999);
+      expect(res.body.data.totalAmount).toBe(1099);
       expect(res.body.data.status).toBe('confirmed');
 
       const createdId = res.body.data.id;

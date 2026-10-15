@@ -64,7 +64,7 @@ describe('AppStore - State Management & In-House Security Gateways', () => {
       baseAmount: 3499,
       discountAmount: 1500,
       collectionFee: 0,
-      totalAmount: 1999,
+      totalAmount: 1099,
       paymentMethod: 'cash_on_collection',
       paymentStatus: 'pending',
       patient: invalidPatient
@@ -109,14 +109,14 @@ describe('AppStore - State Management & In-House Security Gateways', () => {
       baseAmount: 3499,
       discountAmount: 1500,
       collectionFee: 0,
-      totalAmount: 1999, // Canonical price
+      totalAmount: 1099, // Canonical price
       paymentMethod: 'cash_on_collection',
       paymentStatus: 'pending',
       patient: validPatient
     });
 
     expect(booking.id).toMatch(/^TBL-\d{6}$/);
-    expect(booking.totalAmount).toBe(1999);
+    expect(booking.totalAmount).toBe(1099);
     expect(booking.status).toBe('confirmed');
 
     const stored = store.getLocalBookings();

@@ -18,18 +18,18 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
   });
 
   it('correctly calculates package multi-person tier discounts', () => {
-    // Full Body Checkup: 1p: 1999, 2p: 3599, 3p: 4999, 4p: 6199
+    // Full Body Checkup: 1p: 1099, 2p: 2099, 3p: 2999, 4p: 3799
     const tier1 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 1);
-    expect(tier1.price).toBe(1999);
-    expect(tier1.mrp).toBe(3499);
+    expect(tier1.price).toBe(1099);
+    expect(tier1.mrp).toBe(2499);
 
     const tier2 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 2);
-    expect(tier2.price).toBe(3599);
-    expect(tier2.mrp).toBe(6998);
+    expect(tier2.price).toBe(2099);
+    expect(tier2.mrp).toBe(4998);
 
     const tier4 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 4);
-    expect(tier4.price).toBe(6199);
-    expect(tier4.mrp).toBe(13996);
+    expect(tier4.price).toBe(3799);
+    expect(tier4.mrp).toBe(9996);
   });
 
   it('waives home sample collection fee when total exceeds threshold (₹500)', () => {
@@ -40,8 +40,8 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
         itemId: 'pkg-healthy-india-2026',
         name: 'Full Body Checkup',
         category: 'Checkup',
-        price: 1999,
-        mrp: 3499,
+        price: 1099,
+        mrp: 2499,
         persons: 1,
         fastingHours: 10
       }
@@ -49,7 +49,7 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
 
     const totals = PricingService.calculateCartTotals(highValueCart, false);
     expect(totals.collectionFee).toBe(0); // Free collection
-    expect(totals.totalAmount).toBe(1999);
+    expect(totals.totalAmount).toBe(1099);
   });
 
   it('charges standard collection fee (₹100) when order is below ₹500', () => {
@@ -80,8 +80,8 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
         itemId: 'pkg-healthy-india-2026',
         name: 'Full Body Checkup',
         category: 'Checkup',
-        price: 1999,
-        mrp: 3499,
+        price: 1099,
+        mrp: 2499,
         persons: 1,
         fastingHours: 10
       }
@@ -89,7 +89,7 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
 
     const totals = PricingService.calculateCartTotals(cart, true);
     expect(totals.expressFee).toBe(150);
-    expect(totals.totalAmount).toBe(1999 + 150);
+    expect(totals.totalAmount).toBe(1099 + 150);
   });
 
   it('SECURITY TEST: Flags and rejects ₹1 client price tampering exploit', () => {
@@ -105,7 +105,7 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
     expect(verification.isValid).toBe(false);
     expect(verification.tamperingDetected).toBe(true);
     expect(verification.errorMessage).toContain('Security Violation');
-    expect(verification.verifiedFinancials.totalAmount).toBe(1999);
+    expect(verification.verifiedFinancials.totalAmount).toBe(1099);
   });
 
   it('accepts legitimate bookings where client matches authoritative calculation', () => {
@@ -114,12 +114,12 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
       itemId: 'pkg-healthy-india-2026',
       persons: 1,
       isExpress: false,
-      totalAmount: 1999
+      totalAmount: 1099
     };
 
     const verification = PricingService.verifyBookingIntegrity(validBooking);
     expect(verification.isValid).toBe(true);
     expect(verification.tamperingDetected).toBe(false);
-    expect(verification.verifiedFinancials.totalAmount).toBe(1999);
+    expect(verification.verifiedFinancials.totalAmount).toBe(1099);
   });
 });

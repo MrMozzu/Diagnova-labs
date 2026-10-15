@@ -26,9 +26,14 @@ let selectedPackageFilter: string = 'all';
 const packagePersons: Record<string, number> = {
   'pkg-healthy-india-2026': 1,
   'pkg-be-healthy-comprehensive': 1,
+  'pkg-diabetic-checkup-prime': 1,
+  'pkg-life-maximiser-plus-male': 1,
+  'pkg-life-maximiser-male': 1,
+  'pkg-summer-wellness-male': 1,
+  'pkg-cancer-screening-female': 1,
+  'pkg-cancer-screening-male': 1,
   'pkg-senior-citizen': 1,
-  'pkg-women-wellness': 1,
-  'pkg-diabetic-care': 1
+  'pkg-women-wellness': 1
 };
 
 let initialHomeHtml = '';
@@ -110,18 +115,25 @@ function renderRouteView() {
   updateCartBadges();
 }
 
-function renderPackagesPageView(): string {
-  // Filter packages based on selectedPackageFilter
-  let displayedPackages = FEATURED_PACKAGES;
-  if (selectedPackageFilter === 'fullbody') {
-    displayedPackages = FEATURED_PACKAGES.filter(p => p.id === 'pkg-healthy-india-2026' || p.id === 'pkg-be-healthy-comprehensive');
-  } else if (selectedPackageFilter === 'senior') {
-    displayedPackages = FEATURED_PACKAGES.filter(p => p.id === 'pkg-senior-citizen');
-  } else if (selectedPackageFilter === 'women') {
-    displayedPackages = FEATURED_PACKAGES.filter(p => p.id === 'pkg-women-wellness');
-  } else if (selectedPackageFilter === 'diabetic') {
-    displayedPackages = FEATURED_PACKAGES.filter(p => p.id === 'pkg-diabetic-care');
+function getFilteredPackages(filter: string): PackageItem[] {
+  if (filter === 'fullbody') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Full Body Checkup' || p.category === 'Comprehensive Checkup');
+  } else if (filter === 'male') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Men Health' || p.category === 'Executive Health' || p.id === 'pkg-cancer-screening-male');
+  } else if (filter === 'female') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Women Health' || p.id === 'pkg-cancer-screening-female');
+  } else if (filter === 'cancer') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Cancer Screening');
+  } else if (filter === 'diabetic') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Diabetes Care' || p.id === 'pkg-diabetic-checkup-prime');
+  } else if (filter === 'senior') {
+    return FEATURED_PACKAGES.filter(p => p.id === 'pkg-senior-citizen');
   }
+  return FEATURED_PACKAGES;
+}
+
+function renderPackagesPageView(): string {
+  const displayedPackages = getFilteredPackages(selectedPackageFilter);
 
   return `
     <!-- PAGE HERO BANNER -->
@@ -148,19 +160,22 @@ function renderPackagesPageView(): string {
         <!-- FILTER PILLS BAR -->
         <div class="packages-filter-bar">
           <button class="package-filter-pill ${selectedPackageFilter === 'all' ? 'active' : ''}" data-pkg-filter="all">
-            All Packages (5)
+            All Packages (${FEATURED_PACKAGES.length})
           </button>
           <button class="package-filter-pill ${selectedPackageFilter === 'fullbody' ? 'active' : ''}" data-pkg-filter="fullbody">
-            Full Body Screening
+            Full Body Checkups
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'senior' ? 'active' : ''}" data-pkg-filter="senior">
-            Senior Citizen (50+)
+          <button class="package-filter-pill ${selectedPackageFilter === 'male' ? 'active' : ''}" data-pkg-filter="male">
+            Men's Health
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'women' ? 'active' : ''}" data-pkg-filter="women">
-            Women's Wellness
+          <button class="package-filter-pill ${selectedPackageFilter === 'female' ? 'active' : ''}" data-pkg-filter="female">
+            Women's Health
+          </button>
+          <button class="package-filter-pill ${selectedPackageFilter === 'cancer' ? 'active' : ''}" data-pkg-filter="cancer">
+            Cancer Screening
           </button>
           <button class="package-filter-pill ${selectedPackageFilter === 'diabetic' ? 'active' : ''}" data-pkg-filter="diabetic">
-            Diabetic Care
+            Diabetes Care
           </button>
         </div>
 
@@ -1590,16 +1605,7 @@ function bindPackagesPageEvents() {
 
       const grid = document.getElementById('packages-page-grid');
       if (grid) {
-        let filtered = FEATURED_PACKAGES;
-        if (selectedPackageFilter === 'fullbody') {
-          filtered = FEATURED_PACKAGES.filter(p => p.id === 'pkg-healthy-india-2026' || p.id === 'pkg-be-healthy-comprehensive');
-        } else if (selectedPackageFilter === 'senior') {
-          filtered = FEATURED_PACKAGES.filter(p => p.id === 'pkg-senior-citizen');
-        } else if (selectedPackageFilter === 'women') {
-          filtered = FEATURED_PACKAGES.filter(p => p.id === 'pkg-women-wellness');
-        } else if (selectedPackageFilter === 'diabetic') {
-          filtered = FEATURED_PACKAGES.filter(p => p.id === 'pkg-diabetic-care');
-        }
+        const filtered = getFilteredPackages(selectedPackageFilter);
         grid.innerHTML = filtered.map(pkg => renderPackageCard(pkg)).join('');
         bindPackageCardEvents();
       }
