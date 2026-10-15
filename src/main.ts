@@ -768,7 +768,7 @@ function searchItems(query: string): { matchingTests: TestItem[]; matchingPackag
 
     const synonymMatch =
       (q.includes('full body') || q.includes('body checkup') || q.includes('checkup') || q.includes('preventative') || q.includes('package') || q.includes('healthy india')) ||
-      ((q.includes('diabetes') || q.includes('sugar') || q.includes('hba1c')) && pkg.id === 'pkg-be-healthy-comprehensive') ||
+      ((q.includes('diabetes') || q.includes('diabetic') || q.includes('sugar') || q.includes('hba1c') || q.includes('prime')) && pkg.id === 'pkg-be-healthy-comprehensive') ||
       (q.includes('cbc') || q.includes('lft') || q.includes('kft') || q.includes('lipid'));
 
     return titleMatch || catMatch || tagMatch || sumMatch || paramMatch || synonymMatch;

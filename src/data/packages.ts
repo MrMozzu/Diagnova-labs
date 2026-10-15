@@ -114,7 +114,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   {
     id: 'pkg-be-healthy-comprehensive',
     slug: 'diabetes-care',
-    title: 'Diabetes Care',
+    title: 'Diagnova Diabetic Checkup Prime',
     category: 'Diabetes Care',
     tagline: 'Vital preventative health screening powered by gold-standard 3-month HbA1c & metabolic markers',
     parametersCount: 16,
