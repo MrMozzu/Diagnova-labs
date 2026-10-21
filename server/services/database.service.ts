@@ -73,7 +73,7 @@ export class DatabaseService {
           .select('*, patient:patients(*)')
           .order('created_at', { ascending: false });
 
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
           return data.map((b: any) => ({
             id: b.id,
             createdAt: b.created_at,
@@ -117,8 +117,56 @@ export class DatabaseService {
   }
 
   public async getBookingById(id: string): Promise<Booking | null> {
-    const list = await this.getBookings();
-    return list.find(b => b.id.toLowerCase() === id.toLowerCase()) || null;
+    if (this.supabase) {
+      try {
+        const { data, error } = await this.supabase
+          .from('bookings')
+          .select('*, patient:patients(*)')
+          .eq('id', id)
+          .maybeSingle();
+
+        if (!error && data) {
+          return {
+            id: data.id,
+            createdAt: data.created_at,
+            itemType: data.booking_type,
+            itemId: data.item_id,
+            itemName: data.item_name,
+            persons: data.number_of_persons,
+            scheduledDate: data.scheduled_date,
+            scheduledSlot: data.scheduled_slot,
+            isExpress: data.is_express,
+            baseAmount: Number(data.base_amount),
+            discountAmount: Number(data.discount_amount),
+            collectionFee: Number(data.collection_fee),
+            totalAmount: Number(data.total_amount),
+            paymentMethod: data.payment_method,
+            paymentStatus: data.payment_status,
+            status: data.status,
+            patient: {
+              fullName: data.patient?.full_name || '',
+              phone: data.patient?.phone || '',
+              email: data.patient?.email || '',
+              age: data.patient?.age || 0,
+              gender: data.patient?.gender || 'Male',
+              address: data.patient?.address || '',
+              landmark: data.patient?.landmark || '',
+              city: data.patient?.city || '',
+              pincode: data.patient?.pincode || ''
+            },
+            phlebotomist: data.phlebotomist_name ? {
+              name: data.phlebotomist_name,
+              phone: data.phlebotomist_phone || ''
+            } : undefined
+          };
+        }
+      } catch (err) {
+        // Fallback to local memoryData below
+      }
+    }
+
+    const local = this.memoryData.bookings.find(b => b.id.toLowerCase() === id.toLowerCase());
+    return local || null;
   }
 
   public async insertBooking(booking: Booking): Promise<Booking> {
