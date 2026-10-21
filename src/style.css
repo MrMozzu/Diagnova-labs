@@ -3489,19 +3489,102 @@ img {
 
 .comparison-table th,
 .comparison-table td {
-  padding: 12px 16px;
+  padding: 14px 18px;
   border-bottom: 1px solid #f1f5f9;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
   text-align: left;
+  font-weight: 600;
+  color: #334155;
+  background: #ffffff;
 }
 
 .comparison-table th {
   background: #f8fafc;
   color: #0f172a;
   font-weight: 700;
+  font-size: 0.9rem;
 }
 
 .comparison-table tr:hover td {
   background: #f8fafc;
+}
+
+.comparison-table th.highlight-col {
+  background: #eff6ff;
+  border-left: 1.5px solid #bfdbfe;
+  border-right: 1.5px solid #bfdbfe;
+}
+
+.comparison-table td.highlight-col {
+  background: #fafcff;
+  border-left: 1.5px solid #bfdbfe;
+  border-right: 1.5px solid #bfdbfe;
+}
+
+.comparison-table tr:hover td.highlight-col {
+  background: #eff6ff;
+}
+
+.table-price-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.table-price-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-mrp-val {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.table-discount-tag {
+  display: inline-block;
+  background: #ffedd5;
+  color: #c2410c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.btn-table-book {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #ea580c;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.28);
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+.btn-table-book:hover {
+  background: #c2410c;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(234, 88, 12, 0.38);
 }
 
 /* ==========================================================================
