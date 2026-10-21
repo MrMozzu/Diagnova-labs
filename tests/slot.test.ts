@@ -2,10 +2,17 @@ import { describe, it, expect } from 'vitest';
 import { SlotService } from '../src/services/slot.service';
 
 describe('SlotService - Phlebotomist Slot Exclusivity & Anti-Double-Booking', () => {
+  const formatLocalDate = (d: Date): string => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   it('rejects booking dates in the past', () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
+    const dateStr = formatLocalDate(yesterday);
 
     const check = SlotService.isValidBookingDate(dateStr);
     expect(check.isValid).toBe(false);
@@ -13,19 +20,19 @@ describe('SlotService - Phlebotomist Slot Exclusivity & Anti-Double-Booking', ()
   });
 
   it('accepts today and valid future dates within 30 days', () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date());
     expect(SlotService.isValidBookingDate(today).isValid).toBe(true);
 
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
-    const nextWeekStr = nextWeek.toISOString().split('T')[0];
+    const nextWeekStr = formatLocalDate(nextWeek);
     expect(SlotService.isValidBookingDate(nextWeekStr).isValid).toBe(true);
   });
 
   it('rejects dates beyond 30 days in advance', () => {
     const farFuture = new Date();
     farFuture.setDate(farFuture.getDate() + 45);
-    const farDateStr = farFuture.toISOString().split('T')[0];
+    const farDateStr = formatLocalDate(farFuture);
 
     const check = SlotService.isValidBookingDate(farDateStr);
     expect(check.isValid).toBe(false);

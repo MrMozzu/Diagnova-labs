@@ -31,15 +31,25 @@ export class SlotService {
       return { isValid: false, error: 'Scheduled date is required.' };
     }
 
-    const targetDate = new Date(dateStr);
-    if (isNaN(targetDate.getTime())) {
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) {
+      return { isValid: false, error: 'Invalid date format provided.' };
+    }
+    const year = Number(parts[0]);
+    const month = Number(parts[1]);
+    const day = Number(parts[2]);
+    if (!year || !month || !day) {
+      return { isValid: false, error: 'Invalid date format provided.' };
+    }
+
+    const selected = new Date(year, month - 1, day);
+    if (isNaN(selected.getTime())) {
       return { isValid: false, error: 'Invalid date format provided.' };
     }
 
     // Set time to start of day for comparison
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const selected = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
 
     if (selected < today) {
       return { isValid: false, error: 'Cannot schedule sample collection for past dates.' };

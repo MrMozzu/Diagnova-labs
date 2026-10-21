@@ -211,6 +211,78 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     ]
   },
   {
+    id: 'pkg-life-maximiser-male',
+    slug: 'life-maximiser-male',
+    title: 'Diagnova Life Maximiser Health Checkup Package - Male',
+    category: 'Men Health',
+    tagline: 'Deep hormonal, cardiac and metabolic profiling tailored for proactive men',
+    parametersCount: 84,
+    parametersSummary: 'Testosterone • Heart Profile • Liver • Kidney • Pancreas',
+    tatText: 'Report in 24 hours',
+    baseMrp: 8330,
+    fastingHours: 10,
+    iconType: 'user',
+    badge: 'Advanced Male',
+    pricing: {
+      1: { price: 2499, mrp: 8330, discount: 70 },
+      2: { price: 4699, mrp: 16660, discount: 72 },
+      3: { price: 6799, mrp: 24990, discount: 73 },
+      4: { price: 8599, mrp: 33320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Hormonal Baseline',
+        tests: ['Total Testosterone', 'DHEA-S']
+      },
+      {
+        category: 'Metabolic & Cardiac Health',
+        tests: ['HbA1c Glycated Hemoglobin', 'Lipid Profile 8 Parameters', 'Fasting Blood Sugar', 'Cardiac hs-CRP']
+      },
+      {
+        category: 'Vital Organ Function',
+        tests: ['Liver Function Panel (12 tests)', 'Renal Function Panel (11 tests)', 'Complete Blood Count (24 tests)', 'Urine Examination (23 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-life-maximiser-female',
+    slug: 'life-maximiser-female',
+    title: 'Diagnova Life Maximiser Health Checkup Package - Female',
+    category: 'Women Health',
+    tagline: 'Deep hormonal, thyroid, ferritin and vital organ evaluation designed for women',
+    parametersCount: 86,
+    parametersSummary: 'Thyroid Total • Ferritin & Iron • HbA1c • Calcium • LFT',
+    tatText: 'Report in 24 hours',
+    baseMrp: 8330,
+    fastingHours: 10,
+    iconType: 'female',
+    badge: 'Advanced Female',
+    pricing: {
+      1: { price: 2499, mrp: 8330, discount: 70 },
+      2: { price: 4699, mrp: 16660, discount: 72 },
+      3: { price: 6799, mrp: 24990, discount: 73 },
+      4: { price: 8599, mrp: 33320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Thyroid & Hormonal Baseline',
+        tests: ['TSH Ultra-sensitive', 'Total T3', 'Total T4']
+      },
+      {
+        category: 'Iron Metabolism & Bone Baseline',
+        tests: ['Serum Iron', 'Serum Ferritin', 'TIBC', 'Calcium Total', 'Phosphorus']
+      },
+      {
+        category: 'Glycemic & Lipid Health',
+        tests: ['HbA1c Glycated Hemoglobin', 'Fasting Blood Sugar', 'Lipid Profile (9 tests)']
+      },
+      {
+        category: 'Vital Organ & Hematology',
+        tests: ['Complete Blood Count (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Urine Examination (20 tests)']
+      }
+    ]
+  },
+  {
     id: 'pkg-life-maximiser-plus-male',
     slug: 'life-maximiser-plus-male',
     title: 'Diagnova Life Maximiser Plus Health Checkup Package - Male',
@@ -283,78 +355,6 @@ export const FEATURED_PACKAGES: PackageItem[] = [
       {
         category: 'Vital Organ Function & Blood Counts',
         tests: ['Complete Blood Count (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Lipid Profile (9 tests)', 'Urine Routine Examination (23 tests)']
-      }
-    ]
-  },
-  {
-    id: 'pkg-life-maximiser-male',
-    slug: 'life-maximiser-male',
-    title: 'Diagnova Life Maximiser Health Checkup Package - Male',
-    category: 'Men Health',
-    tagline: 'Deep hormonal, cardiac and metabolic profiling tailored for proactive men',
-    parametersCount: 84,
-    parametersSummary: 'Testosterone • Heart Profile • Liver • Kidney • Pancreas',
-    tatText: 'Report in 24 hours',
-    baseMrp: 8330,
-    fastingHours: 10,
-    iconType: 'user',
-    badge: 'Advanced Male',
-    pricing: {
-      1: { price: 2499, mrp: 8330, discount: 70 },
-      2: { price: 4699, mrp: 16660, discount: 72 },
-      3: { price: 6799, mrp: 24990, discount: 73 },
-      4: { price: 8599, mrp: 33320, discount: 74 }
-    },
-    allParameters: [
-      {
-        category: 'Hormonal Baseline',
-        tests: ['Total Testosterone', 'DHEA-S']
-      },
-      {
-        category: 'Metabolic & Cardiac Health',
-        tests: ['HbA1c Glycated Hemoglobin', 'Lipid Profile 8 Parameters', 'Fasting Blood Sugar', 'Cardiac hs-CRP']
-      },
-      {
-        category: 'Vital Organ Function',
-        tests: ['Liver Function Panel (12 tests)', 'Renal Function Panel (11 tests)', 'Complete Blood Count (24 tests)', 'Urine Examination (23 tests)']
-      }
-    ]
-  },
-  {
-    id: 'pkg-life-maximiser-female',
-    slug: 'life-maximiser-female',
-    title: 'Diagnova Life Maximiser Health Checkup Package - Female',
-    category: 'Women Health',
-    tagline: 'Deep hormonal, thyroid, ferritin and vital organ evaluation designed for women',
-    parametersCount: 86,
-    parametersSummary: 'Thyroid Total • Ferritin & Iron • HbA1c • Calcium • LFT',
-    tatText: 'Report in 24 hours',
-    baseMrp: 8330,
-    fastingHours: 10,
-    iconType: 'female',
-    badge: 'Advanced Female',
-    pricing: {
-      1: { price: 2499, mrp: 8330, discount: 70 },
-      2: { price: 4699, mrp: 16660, discount: 72 },
-      3: { price: 6799, mrp: 24990, discount: 73 },
-      4: { price: 8599, mrp: 33320, discount: 74 }
-    },
-    allParameters: [
-      {
-        category: 'Thyroid & Hormonal Baseline',
-        tests: ['TSH Ultra-sensitive', 'Total T3', 'Total T4']
-      },
-      {
-        category: 'Iron Metabolism & Bone Baseline',
-        tests: ['Serum Iron', 'Serum Ferritin', 'TIBC', 'Calcium Total', 'Phosphorus']
-      },
-      {
-        category: 'Glycemic & Lipid Health',
-        tests: ['HbA1c Glycated Hemoglobin', 'Fasting Blood Sugar', 'Lipid Profile (9 tests)']
-      },
-      {
-        category: 'Vital Organ & Hematology',
-        tests: ['Complete Blood Count (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Urine Examination (20 tests)']
       }
     ]
   },
