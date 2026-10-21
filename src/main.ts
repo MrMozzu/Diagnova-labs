@@ -449,31 +449,73 @@ function renderPackageCard(pkg: PackageItem): string {
     iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M12 13v8"/><path d="M9 17h6"/><path d="M5 8c0 4 3 7 7 7s7-3 7-7"/></svg>`;
   }
 
+  const organTags = pkg.parametersSummary
+    ? pkg.parametersSummary.split('•').map(t => t.trim()).filter(Boolean)
+    : [];
+
   return `
     <div class="package-card" data-pkg-id="${pkg.id}">
-      <div class="${iconClass}">
-        ${iconSvg}
+      <div class="package-card-content">
+        <div class="package-card-top-row">
+          <div class="${iconClass}">
+            ${iconSvg}
+          </div>
+          <div class="package-tat-pill">
+            <span class="tat-indicator-dot"></span>
+            ${pkg.tatText}
+          </div>
+        </div>
+
+        <h3 class="package-card-title" title="${pkg.title}">${pkg.title}</h3>
+
+        <div class="package-params-header">
+          <span class="package-params-badge" data-action="view-params" data-pkg-id="${pkg.id}" role="button" tabindex="0" title="Click to view all ${pkg.parametersCount} tests">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            ${pkg.parametersCount} Tests Included
+          </span>
+          <button type="button" class="btn-pkg-view-tests" data-action="view-params" data-pkg-id="${pkg.id}" title="View detailed test parameter list">
+            <span>View Tests</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <div class="package-chips-row">
+          ${organTags.map(tag => `
+            <span class="pkg-organ-chip" data-action="view-params" data-pkg-id="${pkg.id}" title="Click to view ${tag} tests in this package">${tag}</span>
+          `).join('')}
+        </div>
+
+        <div class="package-perk-line">
+          <span class="perk-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Free Sample Pickup
+          </span>
+          <span class="perk-sep">•</span>
+          <span class="perk-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${pkg.fastingHours ? `${pkg.fastingHours}h Fasting` : 'No Fasting'}
+          </span>
+        </div>
       </div>
 
-      <h3 class="package-card-title">${pkg.title}</h3>
-      <div class="package-params-count">Parameters: ${pkg.parametersCount} tests</div>
-      <div class="package-params-sub">${pkg.parametersSummary}</div>
+      <div class="package-card-footer">
+        <div class="package-price-row">
+          <div class="price-stack">
+            <span class="price-current">₹ ${tier.price.toLocaleString('en-IN')}</span>
+            <span class="price-mrp">₹ ${tier.mrp.toLocaleString('en-IN')}</span>
+          </div>
+          <span class="badge-discount">${tier.discount}% OFF</span>
+        </div>
 
-      <div class="package-tat-pill">${pkg.tatText}</div>
-
-      <div class="package-price-row">
-        <span class="price-current">₹ ${tier.price.toLocaleString('en-IN')}</span>
-        <span class="price-mrp">₹ ${tier.mrp.toLocaleString('en-IN')}</span>
-        <span class="badge-discount">${tier.discount}% OFF</span>
-      </div>
-
-      <div class="package-card-actions">
-        <button class="btn-card-book-now" data-action="book-package" data-pkg-id="${pkg.id}">
-          Book Now
-        </button>
-        <button class="btn-card-cart-toggle ${store.isInCart(pkg.id) ? 'added' : ''}" data-action="toggle-cart-pkg" data-pkg-id="${pkg.id}" title="${store.isInCart(pkg.id) ? 'In Cart' : 'Add to Cart'}" aria-label="Add package to cart">
-          ${store.isInCart(pkg.id) ? '✓' : '+'}
-        </button>
+        <div class="package-card-actions">
+          <button class="btn-card-book-now" data-action="book-package" data-pkg-id="${pkg.id}">
+            <span>Book Now</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <button class="btn-card-cart-toggle ${store.isInCart(pkg.id) ? 'added' : ''}" data-action="toggle-cart-pkg" data-pkg-id="${pkg.id}" title="${store.isInCart(pkg.id) ? 'In Cart' : 'Add to Cart'}" aria-label="Add package to cart">
+            ${store.isInCart(pkg.id) ? '✓' : '+'}
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -502,12 +544,13 @@ function renderTestCatalogCard(test: TestItem): string {
           <span class="badge-discount">${test.discountPercent}% OFF</span>
         </div>
 
-        <div class="card-buttons-row">
-          <button class="btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}">
-            ${isInCart ? '✓ Added' : '+ Add'}
+        <div class="card-buttons-row package-card-actions">
+          <button class="btn-card-book-now btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
+            <span>Book Now</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
-          <button class="btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
-            Book Now
+          <button class="btn-card-cart-toggle btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}" title="${isInCart ? 'In Cart' : 'Add to Cart'}" aria-label="Add test to cart">
+            ${isInCart ? '✓' : '+'}
           </button>
         </div>
       </div>
@@ -517,7 +560,7 @@ function renderTestCatalogCard(test: TestItem): string {
 
 function getFilteredAndSortedTests(): TestItem[] {
   let filtered = ALL_TESTS.filter(test => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       test.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
       test.shortDesc.toLowerCase().includes(searchQuery.toLowerCase());
@@ -530,10 +573,10 @@ function getFilteredAndSortedTests(): TestItem[] {
     } else if (selectedCategory === 'Kidney Function' || selectedCategory === 'Kidney') {
       matchesCategory = test.name.toLowerCase().includes('bun') || test.name.toLowerCase().includes('creatinine') || test.name.toLowerCase().includes('kft') || test.name.toLowerCase().includes('urine');
     } else if (selectedCategory === 'Electrolytes') {
-      matchesCategory = test.name.toLowerCase().includes('sodium') || 
-                        test.name.toLowerCase().includes('potassium') || 
-                        test.name.toLowerCase().includes('chloride') || 
-                        test.name.toLowerCase().includes('carbon dioxide');
+      matchesCategory = test.name.toLowerCase().includes('sodium') ||
+        test.name.toLowerCase().includes('potassium') ||
+        test.name.toLowerCase().includes('chloride') ||
+        test.name.toLowerCase().includes('carbon dioxide');
     } else if (selectedCategory === 'Bone & Minerals' || selectedCategory === 'Vitamins') {
       matchesCategory = test.name.toLowerCase().includes('calcium') || test.name.toLowerCase().includes('vitamin');
     } else if (selectedCategory === 'Protein Profile' || selectedCategory === 'Liver') {
@@ -673,10 +716,14 @@ function updateCartBadges() {
     const testId = btn.getAttribute('data-test-id');
     if (testId && store.isInCart(testId)) {
       btn.classList.add('added');
-      btn.textContent = '✓ Added';
+      btn.textContent = '✓';
+      btn.setAttribute('title', 'In Cart');
+      btn.setAttribute('aria-label', 'Test in cart');
     } else {
       btn.classList.remove('added');
-      btn.textContent = '+ Add';
+      btn.textContent = '+';
+      btn.setAttribute('title', 'Add to Cart');
+      btn.setAttribute('aria-label', 'Add test to cart');
     }
   });
 
@@ -776,7 +823,7 @@ function searchItems(query: string): { matchingTests: TestItem[]; matchingPackag
     const catMatch = pkg.category.toLowerCase().includes(q);
     const tagMatch = pkg.tagline.toLowerCase().includes(q);
     const sumMatch = pkg.parametersSummary.toLowerCase().includes(q);
-    const paramMatch = pkg.allParameters.some(cat => 
+    const paramMatch = pkg.allParameters.some(cat =>
       cat.category.toLowerCase().includes(q) ||
       cat.tests.some(t => t.toLowerCase().includes(q))
     );
@@ -1066,8 +1113,8 @@ function renderHomepageSearchResults() {
         <h3 class="hp-subgroup-title">Matching Clinical Tests (${matchingTests.length})</h3>
         <div class="tests-catalog-grid">
           ${matchingTests.map(test => {
-            const isInCart = store.isInCart(test.id);
-            return `
+    const isInCart = store.isInCart(test.id);
+    return `
               <div class="test-catalog-card" data-test-id="${test.id}">
                 <span class="test-cat-tag">${test.category}</span>
                 <h3 class="test-title">${highlightMatch(test.name, searchQuery)}</h3>
@@ -1088,18 +1135,19 @@ function renderHomepageSearchResults() {
                     <span class="badge-discount">${test.discountPercent}% OFF</span>
                   </div>
 
-                  <div class="card-buttons-row">
-                    <button class="btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}">
-                      ${isInCart ? '✓ Added' : '+ Add'}
+                  <div class="card-buttons-row package-card-actions">
+                    <button class="btn-card-book-now btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
+                      <span>Book Now</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
-                    <button class="btn-book-test-sm" data-action="book-test" data-test-id="${test.id}">
-                      Book Now
+                    <button class="btn-card-cart-toggle btn-add-cart ${isInCart ? 'added' : ''}" data-action="toggle-cart-test" data-test-id="${test.id}" title="${isInCart ? 'In Cart' : 'Add to Cart'}" aria-label="Add test to cart">
+                      ${isInCart ? '✓' : '+'}
                     </button>
                   </div>
                 </div>
               </div>
             `;
-          }).join('')}
+  }).join('')}
         </div>
       </div>
     ` : ''}
@@ -1383,7 +1431,7 @@ function bindHomePageEvents() {
       const riskCat = btn.getAttribute('data-risk') || 'All';
       selectedCategory = riskCat;
       currentPage = 1;
-      
+
       document.querySelectorAll('#category-filter-chips .filter-chip').forEach(b => {
         if (b.getAttribute('data-category') === riskCat) b.classList.add('active');
         else b.classList.remove('active');
@@ -1722,7 +1770,8 @@ function bindPackageCardEvents() {
 
   // View Parameters button
   document.querySelectorAll('[data-action="view-params"]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const pkgId = btn.getAttribute('data-pkg-id')!;
       openParametersModal(pkgId);
     });
