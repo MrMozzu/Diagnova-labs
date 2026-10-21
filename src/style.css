@@ -4017,13 +4017,15 @@ svg {
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
   border-radius: 20px;
-  padding: 20px;
+  padding: 22px 20px 20px 20px;
   box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: left;
-  aspect-ratio: 1 / 1 !important;
+  aspect-ratio: auto;
+  height: 100%;
+  min-height: 0;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -4134,14 +4136,12 @@ svg {
   font-size: 15px;
   font-weight: 750;
   color: #0f172a;
-  line-height: 1.25;
+  line-height: 1.35;
   margin: 0;
-  min-height: 38px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-height: 42px;
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
   word-break: break-word;
 }
 
@@ -4178,24 +4178,29 @@ svg {
 }
 
 .btn-pkg-view-tests {
-  background: transparent;
-  border: none;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 750;
   color: #0284c7;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 6px;
+  gap: 5px;
+  padding: 3.5px 9px;
   border-radius: 6px;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .btn-pkg-view-tests:hover {
-  background: #f0f9ff;
+  background: #e0f2fe;
+  border-color: #7dd3fc;
   color: #0369a1;
-  gap: 6px;
+  gap: 7px;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.12);
 }
 
 /* Interactive Organ Test Chips */
@@ -7653,13 +7658,13 @@ a.btn-card-book-now:active,
   .package-card-title {
     font-size: 13px !important;
     font-weight: 750 !important;
-    line-height: 1.3 !important;
+    line-height: 1.35 !important;
     color: #0f172a !important;
     margin-bottom: 6px !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     min-height: 34px !important;
     word-break: break-word !important;
   }
@@ -7667,9 +7672,11 @@ a.btn-card-book-now:active,
   .package-params-header {
     display: flex !important;
     align-items: center !important;
+    justify-content: space-between !important;
     width: 100% !important;
     gap: 4px !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 8px !important;
+    flex-wrap: wrap !important;
   }
 
   .package-params-badge {
@@ -7677,24 +7684,50 @@ a.btn-card-book-now:active,
     font-weight: 750 !important;
     color: #0369a1 !important;
     background: #f0f9ff !important;
-    padding: 2px 7px !important;
+    padding: 2.5px 6px !important;
     border-radius: 6px !important;
     border: 1px solid #bae6fd !important;
     white-space: nowrap !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 3px !important;
     width: fit-content !important;
     cursor: pointer !important;
   }
 
   .package-params-badge svg {
-    width: 10px !important;
-    height: 10px !important;
+    width: 9px !important;
+    height: 9px !important;
   }
 
   .btn-pkg-view-tests {
-    display: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important;
+    color: #1d4ed8 !important;
+    font-size: 9px !important;
+    font-weight: 750 !important;
+    padding: 2.5px 7px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+  }
+
+  .btn-pkg-view-tests:hover,
+  .btn-pkg-view-tests:active {
+    background: #dbeafe !important;
+    color: #1e40af !important;
+    transform: scale(0.97) !important;
+  }
+
+  .btn-pkg-view-tests svg {
+    width: 9px !important;
+    height: 9px !important;
   }
 
   .package-chips-row {
@@ -7904,15 +7937,15 @@ a.btn-card-book-now:active,
   }
 
   .test-title {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    line-height: 1.25 !important;
+    font-size: 13.5px !important;
+    font-weight: 750 !important;
+    line-height: 1.3 !important;
     margin-bottom: 4px !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-    min-height: 32px !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    min-height: 34px !important;
     word-break: break-word !important;
   }
 
@@ -8838,6 +8871,11 @@ a.btn-card-book-now:active,
     font-size: 12px !important;
     min-height: 31px !important;
     margin-bottom: 4px !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: break-word !important;
   }
 
   .package-price-row .price-current {
@@ -8879,6 +8917,11 @@ a.btn-card-book-now:active,
   .test-title {
     font-size: 12px !important;
     min-height: 28px !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: break-word !important;
   }
 
   .card-buttons-row .btn-add-cart,

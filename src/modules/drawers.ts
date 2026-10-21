@@ -866,40 +866,57 @@ export function openEmailSimulationModal(booking: Booking) {
 export function openParametersModal(pkgId: string) {
   const pkg = FEATURED_PACKAGES.find(p => p.id === pkgId) || FEATURED_PACKAGES[0];
   const modalsRoot = document.getElementById('modals-root')!;
+  document.body.classList.add('modal-open');
+
+  const closeModal = () => {
+    document.body.classList.remove('modal-open');
+    modalsRoot.innerHTML = '';
+    document.removeEventListener('keydown', onKeyDown);
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeModal();
+  };
+  document.addEventListener('keydown', onKeyDown);
 
   modalsRoot.innerHTML = `
     <div class="modal-overlay active" id="params-modal-overlay">
-      <div class="modal-card">
-        <div class="modal-header">
-          <div>
-            <h3 style="font-size: 1.15rem; color: #0f172a;">${pkg.title}</h3>
-            <span style="font-size: 0.8rem; color: #0284c7; font-weight: 700;">Includes ${pkg.parametersCount} Clinical Parameters</span>
+      <div class="modal-card" style="max-width: 620px; padding: 0 !important; overflow: hidden !important;">
+        <div class="modal-header" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #e2e8f0;">
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="font-size: 1.15rem; color: #0f172a; margin-bottom: 3px; word-break: break-word;">${pkg.title}</h3>
+            <span style="font-size: 0.8rem; color: #0284c7; font-weight: 700;">Includes All ${pkg.parametersCount} Clinical Tests</span>
           </div>
-          <button class="modal-close-btn" id="close-params-modal-btn">✕</button>
+          <button class="modal-close-btn" id="close-params-modal-btn" aria-label="Close tests popup" style="flex-shrink: 0; margin-top: -2px;">✕</button>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body" style="padding: 18px 20px; max-height: calc(85vh - 75px); overflow-y: auto;">
+          <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 16px;">
+            Full breakdown of all diagnostic parameters included in this package:
+          </p>
+
           ${pkg.allParameters.map(group => `
             <div style="margin-bottom: 18px;">
-              <h4 style="font-size: 0.92rem; font-weight: 800; color: #1b449c; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">
-                ${group.category}
+              <h4 style="font-size: 0.92rem; font-weight: 800; color: #1b449c; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                <span>${group.category}</span>
+                <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">${group.tests.length} tests</span>
               </h4>
               <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                 ${group.tests.map(t => `
-                  <span style="background: #f1f5f9; color: #334155; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: 6px;">
-                    ${t}
+                  <span style="background: #f1f5f9; color: #334155; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    ✓ ${t}
                   </span>
                 `).join('')}
               </div>
             </div>
           `).join('')}
 
-          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
-              <span style="font-size: 0.75rem; color: #64748b;">Starting from</span>
-              <div style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">₹ ${pkg.pricing[1].price.toLocaleString('en-IN')}</div>
+              <span style="font-size: 0.75rem; color: #64748b; display: block;">Starting from</span>
+              <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">₹ ${pkg.pricing[1].price.toLocaleString('en-IN')}</div>
             </div>
-            <button class="btn-pill-primary" id="modal-book-pkg-now">
+            <button class="btn-pill-primary" id="modal-book-pkg-now" style="padding: 10px 22px; font-weight: 750;">
               Book This Package
             </button>
           </div>
@@ -908,12 +925,16 @@ export function openParametersModal(pkgId: string) {
     </div>
   `;
 
-  document.getElementById('close-params-modal-btn')?.addEventListener('click', () => {
-    modalsRoot.innerHTML = '';
+  document.getElementById('close-params-modal-btn')?.addEventListener('click', closeModal);
+
+  document.getElementById('params-modal-overlay')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('params-modal-overlay')) {
+      closeModal();
+    }
   });
 
   document.getElementById('modal-book-pkg-now')?.addEventListener('click', () => {
-    modalsRoot.innerHTML = '';
+    closeModal();
     openBookingDrawerForPackage(pkg.id);
   });
 }
