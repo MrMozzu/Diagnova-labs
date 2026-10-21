@@ -7,13 +7,13 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     title: 'Healthy India 2026 Full Body Checkup Advance Plus',
     category: 'Full Body Checkup',
     tagline: 'Flagship preventative health evaluation with full vital organ & metabolic screening',
-    parametersCount: 85,
-    parametersSummary: 'Complete Blood • Liver • Kidney • Thyroid • Urine • Sugar',
+    parametersCount: 92,
+    parametersSummary: 'Complete Blood • Liver • Kidney • Thyroid • Urine • Sugar • HbA1c',
     tatText: 'Report in 24 hours',
     baseMrp: 3663,
     fastingHours: 10,
     iconType: 'user',
-    badge: 'Most Popular',
+    badge: '🔥 Most Booked in the last 30 days',
     pricing: {
       1: { price: 1099, mrp: 3663, discount: 70 },
       2: { price: 2099, mrp: 7326, discount: 71 },
@@ -124,16 +124,23 @@ export const FEATURED_PACKAGES: PackageItem[] = [
         ]
       },
       {
-        category: 'Thyroid & Diabetes Screening (8 tests)',
+        category: 'Thyroid, HbA1c & Metabolic Profile (15 tests)',
         tests: [
           'TSH Ultra - Sensitive',
+          'Total Triiodothyronine (T3)',
+          'Total Thyroxine (T4)',
+          'Free T3 (FT3)',
+          'Free T4 (FT4)',
+          'HbA1c (Glycated Hemoglobin)',
+          'Estimated Average Glucose (eAG)',
           'Blood Glucose Fasting',
           'Serum Calcium',
           'Phosphorus-Inorganic',
           'Sodium',
           'Potassium',
           'Chlorides',
-          'Total Protein'
+          'Total Protein',
+          'Vitamin D Total (25-OH)'
         ]
       }
     ]
@@ -144,8 +151,8 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     title: 'Be Healthy Comprehensive Package (With HbA1c)',
     category: 'Full Body Checkup',
     tagline: 'Vital preventative health screening with gold-standard 3-month HbA1c & metabolic markers',
-    parametersCount: 78,
-    parametersSummary: 'HbA1c HPLC • Fasting Sugar • LFT • KFT • Lipid • CBC',
+    parametersCount: 92,
+    parametersSummary: 'HbA1c HPLC • Fasting Sugar • LFT • KFT • Lipid • CBC • Thyroid',
     tatText: 'Report in 24 hours',
     baseMrp: 5330,
     fastingHours: 10,
@@ -206,6 +213,25 @@ export const FEATURED_PACKAGES: PackageItem[] = [
           'pH', 'Urobilinogen', 'Bile Salt', 'Bile Pigment', 'Pus Cells',
           'RBCs', 'Epithelial Cells', 'Casts', 'Crystals', 'Bacteria', 'Yeast',
           'Nitrite', 'Leukocyte Esterase', 'Color', 'Clarity'
+        ]
+      },
+      {
+        category: 'Thyroid, Iron & Vitamin Markers (14 tests)',
+        tests: [
+          'TSH Ultra-sensitive',
+          'Total Triiodothyronine (T3)',
+          'Total Thyroxine (T4)',
+          'Serum Iron',
+          'Serum Ferritin',
+          'Total Iron Binding Capacity (TIBC)',
+          'Transferrin Saturation %',
+          'Vitamin D Total (25-OH)',
+          'Vitamin B12 (Cyanocobalamin)',
+          'Serum Magnesium',
+          'Serum Zinc',
+          'eGFR Estimated Glomerular Filtration',
+          'hs-CRP (Cardiac Inflammation)',
+          'Microalbuminuria'
         ]
       }
     ]
@@ -1628,15 +1654,15 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     parametersCount: 216,
     parametersSummary: '100+ Food Allergens • 90+ Inhalant Allergens • IgE Total • CBC',
     tatText: 'Report in 52 Hrs.',
-    baseMrp: 14281,
+    baseMrp: 9999,
     fastingHours: 0,
     iconType: 'shield',
     badge: 'Gold Standard 216 Tests',
     pricing: {
-      1: { price: 3142, mrp: 14281, discount: 78 },
-      2: { price: 6099, mrp: 28562, discount: 79 },
-      3: { price: 8799, mrp: 42843, discount: 79 },
-      4: { price: 11199, mrp: 57124, discount: 80 }
+      1: { price: 2999, mrp: 9999, discount: 70 },
+      2: { price: 5699, mrp: 19998, discount: 71 },
+      3: { price: 8199, mrp: 29997, discount: 73 },
+      4: { price: 10399, mrp: 39996, discount: 74 }
     },
     allParameters: [
       {
@@ -1717,15 +1743,15 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     parametersCount: 215,
     parametersSummary: 'Dairy • Cereals • Meats • Seafood • Vegetables • Fruits • Spices',
     tatText: 'Report in 72 Hrs.',
-    baseMrp: 18330,
+    baseMrp: 2330,
     fastingHours: 4,
     iconType: 'shield',
     badge: '215 Food Items',
     pricing: {
-      1: { price: 5316, mrp: 18330, discount: 71 },
-      2: { price: 10299, mrp: 36660, discount: 72 },
-      3: { price: 14899, mrp: 54990, discount: 73 },
-      4: { price: 18999, mrp: 73320, discount: 74 }
+      1: { price: 699, mrp: 2330, discount: 70 },
+      2: { price: 1349, mrp: 4660, discount: 71 },
+      3: { price: 1949, mrp: 6990, discount: 72 },
+      4: { price: 2499, mrp: 9320, discount: 73 }
     },
     allParameters: [
       {

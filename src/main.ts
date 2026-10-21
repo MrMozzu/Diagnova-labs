@@ -475,9 +475,16 @@ function renderPackageCard(pkg: PackageItem): string {
     ? pkg.parametersSummary.split('•').map(t => t.trim()).filter(Boolean)
     : [];
 
+  const isAdvancePlus = pkg.id === 'pkg-healthy-india-2026';
+
   return `
-    <div class="package-card" data-pkg-id="${pkg.id}">
+    <div class="package-card ${isAdvancePlus ? 'package-card-featured' : ''}" data-pkg-id="${pkg.id}">
       <div class="package-card-content">
+        ${isAdvancePlus ? `
+        <div class="pkg-featured-badge-pill">
+          <span class="badge-fire-icon">🔥</span> Most Booked in the last 30 days
+        </div>
+        ` : ''}
         <div class="package-card-top-row">
           <div class="${iconClass}">
             ${iconSvg}

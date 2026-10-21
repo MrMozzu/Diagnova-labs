@@ -4165,6 +4165,40 @@ svg {
   border-color: rgba(2, 132, 199, 0.45);
 }
 
+/* Special Featured Card: Advance Plus Checkup */
+.package-card.package-card-featured {
+  border: 2px solid #0284c7;
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 32%, #ffffff 100%);
+  box-shadow: 0 8px 24px -3px rgba(2, 132, 199, 0.16), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.package-card.package-card-featured:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 44px -4px rgba(2, 132, 199, 0.22), 0 6px 16px rgba(15, 23, 42, 0.08);
+  border-color: #0369a1;
+}
+
+.pkg-featured-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.25);
+  margin-bottom: 2px;
+  width: fit-content;
+}
+
+.pkg-featured-badge-pill .badge-fire-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
 /* Card Content: Structured with clear, balanced, readable gaps */
 .package-card-content {
   display: flex;
