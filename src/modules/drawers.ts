@@ -4,6 +4,7 @@ import { ALL_TESTS, POPULAR_CITIES } from '../data/tests';
 import { FEATURED_PACKAGES } from '../data/packages';
 import type { Booking, CartItem } from '../types';
 import { showToast } from '../utils/toast';
+import { ValidationService } from '../services/validation.service';
 
 // Multi-person counts per package
 const packagePersons: Record<string, number> = {
@@ -32,9 +33,93 @@ let activeBookingItem: {
 } | null = null;
 
 let checkoutStep = 1;
-let selectedSlot = '07:00 AM - 08:00 AM (Fasting Preferred)';
-let isExpressSlot = false;
+let selectedSlot = '06:30 AM - 07:30 AM (Express Morning)';
+let isExpressSlot = true;
 let selectedPaymentMethod: 'online_upi' | 'cash_on_collection' = 'online_upi';
+
+// Patient Details Form State (Persistent across step navigation & genuine user storage)
+export interface PatientFormData {
+  fullName: string;
+  phone: string;
+  email: string;
+  age: string;
+  gender: 'Male' | 'Female' | 'Other';
+  address: string;
+  landmark: string;
+  city: string;
+  pincode: string;
+  scheduledDate: string;
+}
+
+const LOCAL_STORAGE_PATIENT_KEY = 'tbl_saved_patient_v1';
+
+function getInitialPatientFormData(): PatientFormData {
+  const currentCity = store.getCity() || 'Bhopal';
+  const defaultData: PatientFormData = {
+    fullName: '',
+    phone: '',
+    email: '',
+    age: '',
+    gender: 'Male',
+    address: '',
+    landmark: '',
+    city: currentCity,
+    pincode: '',
+    scheduledDate: new Date().toISOString().split('T')[0]
+  };
+
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const saved = localStorage.getItem(LOCAL_STORAGE_PATIENT_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Exclude legacy mock data like "Rajesh Sharma"
+        if (parsed.fullName && !parsed.fullName.toLowerCase().includes('rajesh')) {
+          return {
+            ...defaultData,
+            ...parsed,
+            city: parsed.city || currentCity
+          };
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }
+
+  return defaultData;
+}
+
+let patientFormData: PatientFormData = getInitialPatientFormData();
+
+function captureCurrentStepData(): void {
+  if (checkoutStep === 1) {
+    const nameEl = document.getElementById('patient-name') as HTMLInputElement | null;
+    const phoneEl = document.getElementById('patient-phone') as HTMLInputElement | null;
+    const emailEl = document.getElementById('patient-email') as HTMLInputElement | null;
+    const ageEl = document.getElementById('patient-age') as HTMLInputElement | null;
+    const genderEl = document.getElementById('patient-gender') as HTMLSelectElement | null;
+
+    if (nameEl) patientFormData.fullName = nameEl.value.trim();
+    if (phoneEl) patientFormData.phone = phoneEl.value.trim().replace(/\D/g, '').slice(0, 10);
+    if (emailEl) patientFormData.email = emailEl.value.trim();
+    if (ageEl) patientFormData.age = ageEl.value.trim();
+    if (genderEl) patientFormData.gender = (genderEl.value as any) || 'Male';
+  } else if (checkoutStep === 2) {
+    const dateEl = document.getElementById('booking-date-select') as HTMLSelectElement | null;
+    if (dateEl) patientFormData.scheduledDate = dateEl.value;
+  } else if (checkoutStep === 3) {
+    const addrEl = document.getElementById('patient-address') as HTMLTextAreaElement | null;
+    const landmarkEl = document.getElementById('patient-landmark') as HTMLInputElement | null;
+    const cityEl = document.getElementById('patient-city') as HTMLInputElement | null;
+    const pincodeEl = document.getElementById('patient-pincode') as HTMLInputElement | null;
+
+    if (addrEl) patientFormData.address = addrEl.value.trim();
+    if (landmarkEl) patientFormData.landmark = landmarkEl.value.trim();
+    if (cityEl) patientFormData.city = cityEl.value.trim() || store.getCity();
+    if (pincodeEl) patientFormData.pincode = pincodeEl.value.trim().replace(/\D/g, '').slice(0, 6);
+  }
+}
 
 // ==========================================================================
 // CART DRAWER IMPLEMENTATION
@@ -232,6 +317,7 @@ export function openBookingDrawerForPackage(pkgId: string, personsCount?: number
     fastingHours: pkg.fastingHours
   };
 
+  patientFormData.city = store.getCity() || patientFormData.city || 'Bhopal';
   checkoutStep = 1;
   renderBookingDrawer();
 }
@@ -250,6 +336,7 @@ export function openBookingDrawerForTest(testId: string) {
     fastingHours: test.fastingHours
   };
 
+  patientFormData.city = store.getCity() || patientFormData.city || 'Bhopal';
   checkoutStep = 1;
   renderBookingDrawer();
 }
@@ -276,14 +363,14 @@ export function renderBookingDrawer() {
 
   modalsRoot.innerHTML = `
     <div class="drawer-overlay active" id="booking-drawer-overlay">
-      <div class="drawer-container active" id="booking-drawer">
+      <div class="drawer-panel drawer-container active" id="booking-drawer" role="dialog" aria-modal="true" aria-labelledby="booking-drawer-title">
         <!-- DRAWER HEADER -->
         <div class="drawer-header">
-          <div>
+          <div class="drawer-header-title-box">
             <div class="drawer-header-subtitle">STEP ${checkoutStep} OF 4 · ${stepTitles[checkoutStep - 1]}</div>
-            <h3 class="drawer-header-title">${activeBookingItem.name}</h3>
+            <h3 class="drawer-header-title" id="booking-drawer-title">${activeBookingItem.name}</h3>
           </div>
-          <button class="drawer-close-btn" id="close-booking-drawer-btn" aria-label="Close drawer">✕</button>
+          <button class="drawer-header-close-btn drawer-close-btn" id="close-booking-drawer-btn" aria-label="Close drawer">✕</button>
         </div>
 
         <!-- PROGRESS BAR -->
@@ -305,7 +392,7 @@ export function renderBookingDrawer() {
 
           <div style="display: flex; gap: 10px;">
             ${checkoutStep > 1 ? `
-              <button class="btn-drawer-back" id="drawer-prev-step-btn">
+              <button class="btn-drawer-back" id="drawer-prev-step-btn" type="button">
                 ← Back
               </button>
             ` : ''}
@@ -327,9 +414,10 @@ export function renderBookingDrawer() {
     }
   });
 
-  // Bind previous step
+  // Bind previous step with form state capture
   document.getElementById('drawer-prev-step-btn')?.addEventListener('click', () => {
     if (checkoutStep > 1) {
+      captureCurrentStepData();
       checkoutStep--;
       renderBookingDrawer();
     }
@@ -410,31 +498,31 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
 
       <div class="form-group">
         <label class="form-label" for="patient-name">Full Name (as per Aadhaar / ID) *</label>
-        <input type="text" id="patient-name" class="form-input" placeholder="e.g., Rajesh Sharma" value="Rajesh Sharma" required />
+        <input type="text" id="patient-name" class="form-input" placeholder="e.g. Rahul Sharma" value="${patientFormData.fullName}" required autocomplete="name" />
       </div>
 
       <div class="drawer-form-grid-2col">
         <div class="form-group">
           <label class="form-label" for="patient-phone">Mobile Number *</label>
-          <input type="tel" id="patient-phone" class="form-input" placeholder="10-digit number" value="9826011223" required />
+          <input type="tel" id="patient-phone" class="form-input" placeholder="10-digit mobile number" value="${patientFormData.phone}" maxlength="10" required autocomplete="tel" />
         </div>
         <div class="form-group">
-          <label class="form-label" for="patient-email">Email (for Report) *</label>
-          <input type="email" id="patient-email" class="form-input" placeholder="rajesh@gmail.com" value="rajesh@gmail.com" />
+          <label class="form-label" for="patient-email">Email (for Report) <span style="font-weight: normal; color: #94a3b8;">(Optional)</span></label>
+          <input type="email" id="patient-email" class="form-input" placeholder="e.g. rahul@example.com" value="${patientFormData.email}" autocomplete="email" />
         </div>
       </div>
 
       <div class="drawer-form-grid-2col">
         <div class="form-group">
           <label class="form-label" for="patient-age">Age (Years) *</label>
-          <input type="number" id="patient-age" class="form-input" placeholder="Age" value="38" min="1" max="120" required />
+          <input type="number" id="patient-age" class="form-input" placeholder="e.g. 32" value="${patientFormData.age}" min="1" max="120" required />
         </div>
         <div class="form-group">
           <label class="form-label" for="patient-gender">Gender *</label>
           <select id="patient-gender" class="form-input" aria-label="Gender">
-            <option value="Male" selected>Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+            <option value="Male" ${patientFormData.gender === 'Male' ? 'selected' : ''}>Male</option>
+            <option value="Female" ${patientFormData.gender === 'Female' ? 'selected' : ''}>Female</option>
+            <option value="Other" ${patientFormData.gender === 'Other' ? 'selected' : ''}>Other</option>
           </select>
         </div>
       </div>
@@ -459,14 +547,14 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
         <label class="form-label" for="booking-date-select">Preferred Date *</label>
         <select id="booking-date-select" class="form-input" aria-label="Preferred Date">
           ${dateOptions.map(d => `
-            <option value="${d.iso}">${d.display} (${d.iso})</option>
+            <option value="${d.iso}" ${(patientFormData.scheduledDate === d.iso) ? 'selected' : ''}>${d.display} (${d.iso})</option>
           `).join('')}
         </select>
       </div>
 
       <label class="form-label" style="margin-top: 8px; margin-bottom: 8px;">Select 1-Hour Arrival Window *</label>
       <div class="time-slots-grid">
-        <div class="slot-radio-card express active" data-slot="06:30 AM - 07:30 AM (Express Morning)">
+        <div class="slot-radio-card express ${selectedSlot.includes('06:30 AM') ? 'active' : ''}" data-slot="06:30 AM - 07:30 AM (Express Morning)">
           <div class="slot-card-top-row">
             <strong class="slot-card-time">06:30 AM - 07:30 AM</strong>
             <span class="slot-badge slot-badge-green">BEST FOR FASTING</span>
@@ -474,7 +562,7 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
           <span class="slot-card-desc">Fastest morning turnaround · Minimal fasting discomfort</span>
         </div>
 
-        <div class="slot-radio-card" data-slot="07:30 AM - 08:30 AM (Popular)">
+        <div class="slot-radio-card ${selectedSlot.includes('07:30 AM') ? 'active' : ''}" data-slot="07:30 AM - 08:30 AM (Popular)">
           <div class="slot-card-top-row">
             <strong class="slot-card-time">07:30 AM - 08:30 AM</strong>
             <span class="slot-badge slot-badge-blue">POPULAR</span>
@@ -482,21 +570,21 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
           <span class="slot-card-desc">Standard fasting collection window</span>
         </div>
 
-        <div class="slot-radio-card" data-slot="08:30 AM - 09:30 AM">
+        <div class="slot-radio-card ${selectedSlot.includes('08:30 AM') ? 'active' : ''}" data-slot="08:30 AM - 09:30 AM">
           <div class="slot-card-top-row">
             <strong class="slot-card-time">08:30 AM - 09:30 AM</strong>
           </div>
           <span class="slot-card-desc">Convenient morning collection slot</span>
         </div>
 
-        <div class="slot-radio-card" data-slot="09:30 AM - 10:30 AM">
+        <div class="slot-radio-card ${selectedSlot.includes('09:30 AM') ? 'active' : ''}" data-slot="09:30 AM - 10:30 AM">
           <div class="slot-card-top-row">
             <strong class="slot-card-time">09:30 AM - 10:30 AM</strong>
           </div>
           <span class="slot-card-desc">Late morning collection window</span>
         </div>
 
-        <div class="slot-radio-card" data-slot="10:30 AM - 11:30 AM">
+        <div class="slot-radio-card ${selectedSlot.includes('10:30 AM') ? 'active' : ''}" data-slot="10:30 AM - 11:30 AM">
           <div class="slot-card-top-row">
             <strong class="slot-card-time">10:30 AM - 11:30 AM</strong>
           </div>
@@ -507,7 +595,7 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
   }
 
   if (checkoutStep === 3) {
-    const currentCity = store.getCity();
+    const currentCity = patientFormData.city || store.getCity() || 'Bhopal';
     return `
       <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: #0f172a;">Sample Collection Address</h4>
       <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 16px; line-height: 1.4;">
@@ -516,12 +604,12 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
 
       <div class="form-group">
         <label class="form-label" for="patient-address">Full Street Address &amp; Flat / House No. *</label>
-        <textarea id="patient-address" class="form-input" rows="3" placeholder="e.g., Flat 402, Shalimar Heights, Arera Colony" required>Flat 402, Shalimar Heights, Arera Colony</textarea>
+        <textarea id="patient-address" class="form-input" rows="3" placeholder="Flat / House No., Building Name, Street / Colony" required>${patientFormData.address}</textarea>
       </div>
 
       <div class="form-group">
         <label class="form-label" for="patient-landmark">Landmark (Optional)</label>
-        <input type="text" id="patient-landmark" class="form-input" placeholder="e.g., Near Habibganj Station" value="Near Habibganj Station" />
+        <input type="text" id="patient-landmark" class="form-input" placeholder="e.g. Near Metro Station / Landmark" value="${patientFormData.landmark}" />
       </div>
 
       <div class="drawer-form-grid-2col">
@@ -531,7 +619,7 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
         </div>
         <div class="form-group">
           <label class="form-label" for="patient-pincode">Pincode *</label>
-          <input type="text" id="patient-pincode" class="form-input" placeholder="e.g., 462016" value="462016" maxlength="6" required />
+          <input type="text" id="patient-pincode" class="form-input" placeholder="6-digit PIN" value="${patientFormData.pincode}" maxlength="6" required />
         </div>
       </div>
 
@@ -546,10 +634,7 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
   }
 
   // Step 4: Summary & Payment Choice
-  const patientNameVal = (document.getElementById('patient-name') as HTMLInputElement)?.value || 'Rajesh Sharma';
-  const patientPhoneVal = (document.getElementById('patient-phone') as HTMLInputElement)?.value || '9826011223';
-  const patientAddressVal = (document.getElementById('patient-address') as HTMLTextAreaElement)?.value || 'Flat 402, Shalimar Heights';
-  const currentCity = store.getCity();
+  const currentCity = patientFormData.city || store.getCity() || 'Bhopal';
 
   return `
     <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: #0f172a;">Review Order &amp; Payment</h4>
@@ -561,15 +646,19 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
     <div class="order-review-box">
       <div class="review-row">
         <span>Patient Name</span>
-        <strong>${patientNameVal} (${patientPhoneVal})</strong>
+        <strong>${patientFormData.fullName || 'Patient'} (${patientFormData.phone || 'Phone pending'})</strong>
       </div>
       <div class="review-row">
-        <span>Scheduled Window</span>
-        <strong>${selectedSlot}</strong>
+        <span>Patient Age / Gender</span>
+        <span>${patientFormData.age ? `${patientFormData.age} Yrs` : 'Age pending'} · ${patientFormData.gender}</span>
+      </div>
+      <div class="review-row">
+        <span>Scheduled Date &amp; Window</span>
+        <strong>${patientFormData.scheduledDate || 'Scheduled date'} · ${selectedSlot}</strong>
       </div>
       <div class="review-row">
         <span>Doorstep Address</span>
-        <span>${patientAddressVal}, ${currentCity}</span>
+        <span>${patientFormData.address || 'Address pending'}, ${currentCity}${patientFormData.pincode ? ` (${patientFormData.pincode})` : ''}</span>
       </div>
       <div class="review-row">
         <span>Clinical Lab</span>
@@ -623,23 +712,48 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
 }
 
 function handleDrawerNextStep() {
+  captureCurrentStepData();
+
   if (checkoutStep === 1) {
-    const name = (document.getElementById('patient-name') as HTMLInputElement)?.value;
-    const phone = (document.getElementById('patient-phone') as HTMLInputElement)?.value;
-    if (!name || !phone) {
-      showToast('⚠️ Please enter Patient Name and Phone number');
+    if (!patientFormData.fullName || patientFormData.fullName.length < 2) {
+      showToast('⚠️ Please enter the patient\'s full name');
+      document.getElementById('patient-name')?.focus();
       return;
     }
+    if (!ValidationService.isValidIndianPhone(patientFormData.phone)) {
+      showToast('⚠️ Please enter a valid 10-digit Indian mobile number');
+      document.getElementById('patient-phone')?.focus();
+      return;
+    }
+    const ageNum = parseInt(patientFormData.age, 10);
+    if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
+      showToast('⚠️ Please enter a valid patient age (1 - 120)');
+      document.getElementById('patient-age')?.focus();
+      return;
+    }
+    if (patientFormData.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(patientFormData.email)) {
+        showToast('⚠️ Please enter a valid email address');
+        document.getElementById('patient-email')?.focus();
+        return;
+      }
+    }
+
     checkoutStep = 2;
     renderBookingDrawer();
   } else if (checkoutStep === 2) {
     checkoutStep = 3;
     renderBookingDrawer();
   } else if (checkoutStep === 3) {
-    const address = (document.getElementById('patient-address') as HTMLTextAreaElement)?.value;
-    const pincode = (document.getElementById('patient-pincode') as HTMLInputElement)?.value;
-    if (!address || !pincode) {
-      showToast('⚠️ Please provide your full address and pincode');
+    if (!patientFormData.address || patientFormData.address.length < 5) {
+      showToast('⚠️ Please enter full street / home address (min 5 characters)');
+      document.getElementById('patient-address')?.focus();
+      return;
+    }
+    if (!ValidationService.isValidIndianPincode(patientFormData.pincode)) {
+      showToast('⚠️ Please enter a valid 6-digit Indian PIN code');
+      document.getElementById('patient-pincode')?.focus();
       return;
     }
     checkoutStep = 4;
@@ -652,70 +766,98 @@ function handleDrawerNextStep() {
 async function executeBooking() {
   if (!activeBookingItem) return;
 
+  captureCurrentStepData();
+
   const btn = document.getElementById('drawer-next-step-btn') as HTMLButtonElement;
   if (btn) {
     btn.disabled = true;
     btn.textContent = 'Securing Booking...';
   }
 
-  const patientName = (document.getElementById('patient-name') as HTMLInputElement)?.value || 'Rajesh Sharma';
-  const patientPhone = (document.getElementById('patient-phone') as HTMLInputElement)?.value || '9826011223';
-  const patientEmail = (document.getElementById('patient-email') as HTMLInputElement)?.value || 'rajesh@gmail.com';
-  const patientAge = Number((document.getElementById('patient-age') as HTMLInputElement)?.value) || 38;
-  const patientGender = ((document.getElementById('patient-gender') as HTMLSelectElement)?.value || 'Male') as any;
-  const patientAddress = (document.getElementById('patient-address') as HTMLTextAreaElement)?.value || 'Flat 402, Shalimar Heights';
-  const patientLandmark = (document.getElementById('patient-landmark') as HTMLInputElement)?.value || '';
-  const patientCity = (document.getElementById('patient-city') as HTMLInputElement)?.value || store.getCity();
-  const patientPincode = (document.getElementById('patient-pincode') as HTMLInputElement)?.value || '462016';
-  const scheduledDate = (document.getElementById('booking-date-select') as HTMLSelectElement)?.value || new Date().toISOString().split('T')[0];
+  const patientName = patientFormData.fullName;
+  const patientPhone = patientFormData.phone;
+  const patientEmail = patientFormData.email || `${patientFormData.phone}@diagnova.local`;
+  const patientAge = Number(patientFormData.age) || 30;
+  const patientGender = patientFormData.gender || 'Male';
+  const patientAddress = patientFormData.address;
+  const patientLandmark = patientFormData.landmark || '';
+  const patientCity = patientFormData.city || store.getCity();
+  const patientPincode = patientFormData.pincode;
+  const scheduledDate = patientFormData.scheduledDate || new Date().toISOString().split('T')[0];
 
   const cartItems = activeBookingItem.type === 'cart' ? store.getCart() : undefined;
 
-  const booking = await store.createBooking({
-    itemType: activeBookingItem.type,
-    itemId: activeBookingItem.id,
-    itemName: activeBookingItem.name,
-    items: cartItems,
-    persons: activeBookingItem.persons,
-    scheduledDate: scheduledDate,
-    scheduledSlot: selectedSlot,
-    isExpress: isExpressSlot,
-    baseAmount: activeBookingItem.mrp,
-    discountAmount: activeBookingItem.mrp - activeBookingItem.price,
-    collectionFee: 0,
-    totalAmount: activeBookingItem.price,
-    paymentMethod: selectedPaymentMethod,
-    paymentStatus: selectedPaymentMethod === 'online_upi' ? 'paid' : 'pending',
-    patient: {
-      fullName: patientName,
-      phone: patientPhone,
-      email: patientEmail,
-      age: patientAge,
-      gender: patientGender,
-      address: patientAddress,
-      landmark: patientLandmark,
-      city: patientCity,
-      pincode: patientPincode
-    }
-  });
-
-  // If this was a cart checkout, clear cart now
-  if (activeBookingItem.type === 'cart') {
-    store.clearCart();
-  }
-
-  closeDrawer();
-
-  // Trigger celebration confetti on demand
-  import('canvas-confetti').then(({ default: confetti }) => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
+  try {
+    const booking = await store.createBooking({
+      itemType: activeBookingItem.type,
+      itemId: activeBookingItem.id,
+      itemName: activeBookingItem.name,
+      items: cartItems,
+      persons: activeBookingItem.persons,
+      scheduledDate: scheduledDate,
+      scheduledSlot: selectedSlot,
+      isExpress: isExpressSlot,
+      baseAmount: activeBookingItem.mrp,
+      discountAmount: activeBookingItem.mrp - activeBookingItem.price,
+      collectionFee: 0,
+      totalAmount: activeBookingItem.price,
+      paymentMethod: selectedPaymentMethod,
+      paymentStatus: selectedPaymentMethod === 'online_upi' ? 'paid' : 'pending',
+      patient: {
+        fullName: patientName,
+        phone: patientPhone,
+        email: patientEmail,
+        age: patientAge,
+        gender: patientGender,
+        address: patientAddress,
+        landmark: patientLandmark,
+        city: patientCity,
+        pincode: patientPincode
+      }
     });
-  }).catch(() => {});
 
-  openConfirmationModal(booking);
+    // Save authentic patient details for next booking
+    try {
+      localStorage.setItem(LOCAL_STORAGE_PATIENT_KEY, JSON.stringify({
+        fullName: patientName,
+        phone: patientPhone,
+        email: patientFormData.email,
+        age: patientFormData.age,
+        gender: patientGender,
+        address: patientAddress,
+        landmark: patientLandmark,
+        city: patientCity,
+        pincode: patientPincode
+      }));
+    } catch {
+      // storage unavailable
+    }
+
+    // If this was a cart checkout, clear cart now
+    if (activeBookingItem.type === 'cart') {
+      store.clearCart();
+    }
+
+    closeDrawer();
+
+    // Trigger celebration confetti on demand
+    import('canvas-confetti').then(({ default: confetti }) => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }).catch(() => {});
+
+    openConfirmationModal(booking);
+  } catch (err: any) {
+    console.error('Booking failed:', err);
+    showToast(`⚠️ Booking error: ${err.message || 'Please check details and retry'}`);
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`;
+    }
+  }
 }
 
 export function closeDrawer() {
