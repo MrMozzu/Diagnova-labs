@@ -118,16 +118,22 @@ function renderRouteView() {
 function getFilteredPackages(filter: string): PackageItem[] {
   if (filter === 'fullbody') {
     return FEATURED_PACKAGES.filter(p => p.category === 'Full Body Checkup' || p.category === 'Comprehensive Checkup');
-  } else if (filter === 'male') {
-    return FEATURED_PACKAGES.filter(p => p.category === 'Men Health' || p.category === 'Executive Health' || p.id === 'pkg-cancer-screening-male');
-  } else if (filter === 'female') {
-    return FEATURED_PACKAGES.filter(p => p.category === 'Women Health' || p.id === 'pkg-cancer-screening-female');
+  } else if (filter === 'cardiac') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Cardiac Care');
+  } else if (filter === 'diabetic') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Diabetes Care');
+  } else if (filter === 'thyroid') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Thyroid Care');
   } else if (filter === 'cancer') {
     return FEATURED_PACKAGES.filter(p => p.category === 'Cancer Screening');
-  } else if (filter === 'diabetic') {
-    return FEATURED_PACKAGES.filter(p => p.category === 'Diabetes Care' || p.id === 'pkg-diabetic-checkup-prime');
-  } else if (filter === 'senior') {
-    return FEATURED_PACKAGES.filter(p => p.id === 'pkg-senior-citizen');
+  } else if (filter === 'female') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Women Health' || p.id.includes('female'));
+  } else if (filter === 'male') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Men Health' || p.category === 'Executive Health' || p.id.includes('male'));
+  } else if (filter === 'allergy') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Allergy & Immunity');
+  } else if (filter === 'dna') {
+    return FEATURED_PACKAGES.filter(p => p.category === 'Genomic & DNA');
   }
   return FEATURED_PACKAGES;
 }
@@ -143,11 +149,11 @@ function renderPackagesPageView(): string {
           <span class="page-banner-eyebrow">PREVENTIVE HEALTHCARE</span>
           <h1 class="page-banner-title">Comprehensive Health Packages</h1>
           <p class="page-banner-desc">
-            NABL accredited full-body checkups, senior citizen care, diabetic monitoring, and women's wellness profiles with 60-minute doorstep sample collection in ${currentCity}.
+            NABL accredited full-body checkups, cardiac risk markers, diabetic monitoring, thyroid profiles, allergy tests, and genomic DNA screening with 60-minute doorstep sample collection in ${currentCity}.
           </p>
           <div class="page-banner-features">
             <div class="banner-feat-pill">✓ 60-Min Doorstep Sample Pickup</div>
-            <div class="banner-feat-pill">✓ Up to 70% Bundle Savings</div>
+            <div class="banner-feat-pill">✓ Up to 82% Bundle Savings</div>
             <div class="banner-feat-pill">✓ Free Doctor Consultation</div>
           </div>
         </div>
@@ -162,20 +168,29 @@ function renderPackagesPageView(): string {
           <button class="package-filter-pill ${selectedPackageFilter === 'all' ? 'active' : ''}" data-pkg-filter="all">
             All Packages (${FEATURED_PACKAGES.length})
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'fullbody' ? 'active' : ''}" data-pkg-filter="fullbody">
-            Full Body Checkups
+          <button class="package-filter-pill ${selectedPackageFilter === 'cardiac' ? 'active' : ''}" data-pkg-filter="cardiac">
+            Cardiac Care
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'male' ? 'active' : ''}" data-pkg-filter="male">
-            Men's Health
+          <button class="package-filter-pill ${selectedPackageFilter === 'diabetic' ? 'active' : ''}" data-pkg-filter="diabetic">
+            Diabetes Care
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'female' ? 'active' : ''}" data-pkg-filter="female">
-            Women's Health
+          <button class="package-filter-pill ${selectedPackageFilter === 'thyroid' ? 'active' : ''}" data-pkg-filter="thyroid">
+            Thyroid Care
           </button>
           <button class="package-filter-pill ${selectedPackageFilter === 'cancer' ? 'active' : ''}" data-pkg-filter="cancer">
             Cancer Screening
           </button>
-          <button class="package-filter-pill ${selectedPackageFilter === 'diabetic' ? 'active' : ''}" data-pkg-filter="diabetic">
-            Diabetes Care
+          <button class="package-filter-pill ${selectedPackageFilter === 'female' ? 'active' : ''}" data-pkg-filter="female">
+            Women's Health
+          </button>
+          <button class="package-filter-pill ${selectedPackageFilter === 'allergy' ? 'active' : ''}" data-pkg-filter="allergy">
+            Allergy & Immunity
+          </button>
+          <button class="package-filter-pill ${selectedPackageFilter === 'dna' ? 'active' : ''}" data-pkg-filter="dna">
+            DNA & Genomics
+          </button>
+          <button class="package-filter-pill ${selectedPackageFilter === 'fullbody' ? 'active' : ''}" data-pkg-filter="fullbody">
+            Full Body Checkups
           </button>
         </div>
 
@@ -438,15 +453,21 @@ function renderPackageCard(pkg: PackageItem): string {
   let iconClass = 'pkg-circle-icon icon-bg-blue';
   let iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 
-  if (pkg.iconType === 'droplet' || pkg.slug.includes('diabetes')) {
+  if (pkg.iconType === 'heart' || pkg.category.includes('Cardiac')) {
+    iconClass = 'pkg-circle-icon icon-bg-red';
+    iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 11h2l1-2 2 4 1-2h2"/></svg>`;
+  } else if (pkg.iconType === 'droplet' || pkg.slug.includes('diabetes') || pkg.category.includes('Allergy')) {
     iconClass = 'pkg-circle-icon icon-bg-blue';
     iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`;
-  } else if (pkg.iconType === 'shield' || pkg.slug.includes('thyroid')) {
+  } else if (pkg.iconType === 'shield' || pkg.slug.includes('thyroid') || pkg.category.includes('Cancer')) {
     iconClass = 'pkg-circle-icon icon-bg-purple';
     iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 8c2 2 4 2 6 0 2 2 4 2 6 0M6 16c2-2 4-2 6 0 2-2 4-2 6 0"/></svg>`;
-  } else if (pkg.iconType === 'female' || pkg.slug.includes('women')) {
+  } else if (pkg.iconType === 'female' || pkg.slug.includes('women') || pkg.slug.includes('antenatal') || pkg.slug.includes('pregnancy')) {
     iconClass = 'pkg-circle-icon icon-bg-pink';
     iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M12 13v8"/><path d="M9 17h6"/><path d="M5 8c0 4 3 7 7 7s7-3 7-7"/></svg>`;
+  } else if (pkg.iconType === 'dna' || pkg.category.includes('Genomic') || pkg.slug.includes('dna')) {
+    iconClass = 'pkg-circle-icon icon-bg-purple';
+    iconSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/><line x1="8.5" y1="15.5" x2="15.5" y2="8.5"/></svg>`;
   }
 
   const organTags = pkg.parametersSummary

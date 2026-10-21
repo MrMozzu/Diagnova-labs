@@ -4091,6 +4091,11 @@ svg {
   color: #db2777;
 }
 
+.icon-bg-red {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
 /* Turnaround Time Badge with Live Pulse */
 .package-tat-pill {
   position: static;
