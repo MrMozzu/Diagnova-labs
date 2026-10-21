@@ -21,15 +21,15 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
     // Full Body Checkup: 1p: 1099, 2p: 2099, 3p: 2999, 4p: 3799
     const tier1 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 1);
     expect(tier1.price).toBe(1099);
-    expect(tier1.mrp).toBe(2499);
+    expect(tier1.mrp).toBe(3663);
 
     const tier2 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 2);
     expect(tier2.price).toBe(2099);
-    expect(tier2.mrp).toBe(4998);
+    expect(tier2.mrp).toBe(7326);
 
     const tier4 = PricingService.calculatePackagePrice('pkg-healthy-india-2026', 4);
     expect(tier4.price).toBe(3799);
-    expect(tier4.mrp).toBe(9996);
+    expect(tier4.mrp).toBe(14652);
   });
 
   it('waives home sample collection fee when total exceeds threshold (₹500)', () => {
@@ -41,7 +41,7 @@ describe('PricingService - In-House Security & Pricing Integrity Engine', () => 
         name: 'Full Body Checkup',
         category: 'Checkup',
         price: 1099,
-        mrp: 2499,
+        mrp: 3663,
         persons: 1,
         fastingHours: 10
       }

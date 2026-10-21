@@ -10,15 +10,15 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     parametersCount: 85,
     parametersSummary: 'Complete Blood • Liver • Kidney • Thyroid • Urine • Sugar',
     tatText: 'Report in 24 hours',
-    baseMrp: 2499,
+    baseMrp: 3663,
     fastingHours: 10,
     iconType: 'user',
     badge: 'Most Popular',
     pricing: {
-      1: { price: 1099, mrp: 2499, discount: 56 },
-      2: { price: 2099, mrp: 4998, discount: 58 },
-      3: { price: 2999, mrp: 7497, discount: 60 },
-      4: { price: 3799, mrp: 9996, discount: 62 }
+      1: { price: 1099, mrp: 3663, discount: 70 },
+      2: { price: 2099, mrp: 7326, discount: 71 },
+      3: { price: 2999, mrp: 10989, discount: 73 },
+      4: { price: 3799, mrp: 14652, discount: 74 }
     },
     allParameters: [
       {
@@ -139,6 +139,428 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     ]
   },
   {
+    id: 'pkg-be-healthy-comprehensive',
+    slug: 'be-healthy-comprehensive-package',
+    title: 'Be Healthy Comprehensive Package (With HbA1c)',
+    category: 'Full Body Checkup',
+    tagline: 'Vital preventative health screening with gold-standard 3-month HbA1c & metabolic markers',
+    parametersCount: 78,
+    parametersSummary: 'HbA1c HPLC • Fasting Sugar • LFT • KFT • Lipid • CBC',
+    tatText: 'Report in 24 hours',
+    baseMrp: 5330,
+    fastingHours: 10,
+    iconType: 'droplet',
+    badge: 'Comprehensive',
+    pricing: {
+      1: { price: 1599, mrp: 5330, discount: 70 },
+      2: { price: 2999, mrp: 10660, discount: 72 },
+      3: { price: 4299, mrp: 15990, discount: 73 },
+      4: { price: 5499, mrp: 21320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Diabetes & Glycemic Assessment (With HbA1c - 3 tests)',
+        tests: [
+          'HbA1c (Glycosylated Hemoglobin) - HPLC Method',
+          'Estimated Average Glucose (eAG)',
+          'Glucose (Fasting Blood Sugar)'
+        ]
+      },
+      {
+        category: 'Complete Blood Count (CBC - 24 tests)',
+        tests: [
+          'Hemoglobin', 'RBC Count', 'WBC Total Count', 'Platelet Count', 'PCV / Hematocrit',
+          'MCV', 'MCH', 'MCHC', 'RDW-CV', 'RDW-SD', 'Neutrophils', 'Lymphocytes',
+          'Monocytes', 'Eosinophils', 'Basophils', 'Absolute Neutrophils', 'Absolute Lymphocytes',
+          'Absolute Monocytes', 'Absolute Eosinophils', 'Absolute Basophils', 'MPV', 'PDW', 'PCT', 'ESR'
+        ]
+      },
+      {
+        category: 'Liver Function Tests (LFT - 12 tests)',
+        tests: [
+          'Bilirubin Total', 'Bilirubin Direct', 'Bilirubin Indirect', 'SGOT / AST',
+          'SGPT / ALT', 'Alkaline Phosphatase (ALP)', 'Total Protein', 'Albumin',
+          'Globulin', 'A/G Ratio', 'GGTP', 'SGOT/SGPT Ratio'
+        ]
+      },
+      {
+        category: 'Kidney Function Tests (KFT - 11 tests)',
+        tests: [
+          'Serum Creatinine', 'Blood Urea Nitrogen (BUN)', 'Uric Acid', 'Urea',
+          'BUN / Creatinine Ratio', 'Urea / Creatinine Ratio', 'Calcium Total',
+          'Phosphorus', 'Sodium', 'Potassium', 'Chloride'
+        ]
+      },
+      {
+        category: 'Lipid Profile (9 tests)',
+        tests: [
+          'Total Cholesterol', 'HDL Good Cholesterol', 'LDL Bad Cholesterol',
+          'Triglycerides', 'VLDL Cholesterol', 'Non-HDL Cholesterol',
+          'Total / HDL Ratio', 'LDL / HDL Ratio', 'HDL / LDL Ratio'
+        ]
+      },
+      {
+        category: 'Urine Routine & Extended Examination (19 tests)',
+        tests: [
+          'Urine Protein', 'Urine Glucose', 'Ketone Bodies', 'Specific Gravity',
+          'pH', 'Urobilinogen', 'Bile Salt', 'Bile Pigment', 'Pus Cells',
+          'RBCs', 'Epithelial Cells', 'Casts', 'Crystals', 'Bacteria', 'Yeast',
+          'Nitrite', 'Leukocyte Esterase', 'Color', 'Clarity'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-life-maximiser-plus-male',
+    slug: 'life-maximiser-plus-male',
+    title: 'Diagnova Life Maximiser Plus Health Checkup Package - Male',
+    category: 'Men Health',
+    tagline: 'Exclusive male executive health screening covering PSA prostate, testosterone & complete vital organs',
+    parametersCount: 92,
+    parametersSummary: 'Testosterone • PSA Prostate • Vit D & B12 • Cardiac • KFT',
+    tatText: 'Report in 24 hours',
+    baseMrp: 9999,
+    fastingHours: 10,
+    iconType: 'user',
+    badge: 'Executive Male',
+    pricing: {
+      1: { price: 2999, mrp: 9999, discount: 70 },
+      2: { price: 5699, mrp: 19998, discount: 71 },
+      3: { price: 8199, mrp: 29997, discount: 73 },
+      4: { price: 10399, mrp: 39996, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Male Hormone & Reproductive Health',
+        tests: ['Total Testosterone', 'Free Testosterone Index', 'PSA Total (Prostate Specific Antigen)']
+      },
+      {
+        category: 'Vitamin & Neurological Markers',
+        tests: ['Vitamin D Total (25-OH)', 'Vitamin B12 (Cyanocobalamin)', 'Serum Ferritin']
+      },
+      {
+        category: 'Cardiac & Lipid Risk Profile',
+        tests: ['hs-CRP (Cardiac Risk Marker)', 'Apolipoprotein A1', 'Apolipoprotein B', 'Lipid Profile Complete (9 tests)']
+      },
+      {
+        category: 'Comprehensive Organ Panels',
+        tests: ['Complete Hemogram (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Thyroid Panel (TSH)', 'Urine Routine Extended (26 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-life-maximiser-plus-female',
+    slug: 'life-maximiser-plus-female',
+    title: 'Diagnova Life Maximiser Plus Health Checkup Package - Female',
+    category: 'Women Health',
+    tagline: 'Exclusive female executive wellness covering CA-125 ovarian biomarker, thyroid, vitamins & vital organs',
+    parametersCount: 94,
+    parametersSummary: 'CA-125 Ovarian • Thyroid Total • Vit D & B12 • Bone • LFT',
+    tatText: 'Report in 24 hours',
+    baseMrp: 9999,
+    fastingHours: 10,
+    iconType: 'female',
+    badge: 'Executive Female',
+    pricing: {
+      1: { price: 2999, mrp: 9999, discount: 70 },
+      2: { price: 5699, mrp: 19998, discount: 71 },
+      3: { price: 8199, mrp: 29997, discount: 73 },
+      4: { price: 10399, mrp: 39996, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Female Tumor Markers & Oncology Screening',
+        tests: ['CA-125 (Ovarian Cancer Biomarker)', 'CEA (Carcinoembryonic Antigen)', 'AFP (Alpha-Fetoprotein)']
+      },
+      {
+        category: 'Vitamins, Iron & Bone Metabolism',
+        tests: ['Vitamin D Total (25-OH)', 'Vitamin B12', 'Serum Ferritin', 'Serum Iron', 'TIBC', 'Calcium Total', 'Phosphorus']
+      },
+      {
+        category: 'Thyroid & Metabolic Health',
+        tests: ['TSH Ultra-sensitive', 'Total T3', 'Total T4', 'HbA1c Glycated Hemoglobin', 'Fasting Blood Sugar']
+      },
+      {
+        category: 'Vital Organ Function & Blood Counts',
+        tests: ['Complete Blood Count (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Lipid Profile (9 tests)', 'Urine Routine Examination (23 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-life-maximiser-male',
+    slug: 'life-maximiser-male',
+    title: 'Diagnova Life Maximiser Health Checkup Package - Male',
+    category: 'Men Health',
+    tagline: 'Deep hormonal, cardiac and metabolic profiling tailored for proactive men',
+    parametersCount: 84,
+    parametersSummary: 'Testosterone • Heart Profile • Liver • Kidney • Pancreas',
+    tatText: 'Report in 24 hours',
+    baseMrp: 8330,
+    fastingHours: 10,
+    iconType: 'user',
+    badge: 'Advanced Male',
+    pricing: {
+      1: { price: 2499, mrp: 8330, discount: 70 },
+      2: { price: 4699, mrp: 16660, discount: 72 },
+      3: { price: 6799, mrp: 24990, discount: 73 },
+      4: { price: 8599, mrp: 33320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Hormonal Baseline',
+        tests: ['Total Testosterone', 'DHEA-S']
+      },
+      {
+        category: 'Metabolic & Cardiac Health',
+        tests: ['HbA1c Glycated Hemoglobin', 'Lipid Profile 8 Parameters', 'Fasting Blood Sugar', 'Cardiac hs-CRP']
+      },
+      {
+        category: 'Vital Organ Function',
+        tests: ['Liver Function Panel (12 tests)', 'Renal Function Panel (11 tests)', 'Complete Blood Count (24 tests)', 'Urine Examination (23 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-life-maximiser-female',
+    slug: 'life-maximiser-female',
+    title: 'Diagnova Life Maximiser Health Checkup Package - Female',
+    category: 'Women Health',
+    tagline: 'Deep hormonal, thyroid, ferritin and vital organ evaluation designed for women',
+    parametersCount: 86,
+    parametersSummary: 'Thyroid Total • Ferritin & Iron • HbA1c • Calcium • LFT',
+    tatText: 'Report in 24 hours',
+    baseMrp: 8330,
+    fastingHours: 10,
+    iconType: 'female',
+    badge: 'Advanced Female',
+    pricing: {
+      1: { price: 2499, mrp: 8330, discount: 70 },
+      2: { price: 4699, mrp: 16660, discount: 72 },
+      3: { price: 6799, mrp: 24990, discount: 73 },
+      4: { price: 8599, mrp: 33320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Thyroid & Hormonal Baseline',
+        tests: ['TSH Ultra-sensitive', 'Total T3', 'Total T4']
+      },
+      {
+        category: 'Iron Metabolism & Bone Baseline',
+        tests: ['Serum Iron', 'Serum Ferritin', 'TIBC', 'Calcium Total', 'Phosphorus']
+      },
+      {
+        category: 'Glycemic & Lipid Health',
+        tests: ['HbA1c Glycated Hemoglobin', 'Fasting Blood Sugar', 'Lipid Profile (9 tests)']
+      },
+      {
+        category: 'Vital Organ & Hematology',
+        tests: ['Complete Blood Count (CBC - 24 tests)', 'Liver Function Tests (LFT - 12 tests)', 'Kidney Function Tests (KFT - 11 tests)', 'Urine Examination (20 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-summer-wellness-male',
+    slug: 'summer-wellness-male',
+    title: 'Diagnova Summer Wellness Package - Male',
+    category: 'Men Health',
+    tagline: 'Essential electrolyte, hydration, hepatic & metabolic recovery monitoring for active lifestyles',
+    parametersCount: 68,
+    parametersSummary: 'Electrolytes • Hydration Index • LFT • KFT • CBC',
+    tatText: 'Report in 24 hours',
+    baseMrp: 6663,
+    fastingHours: 8,
+    iconType: 'droplet',
+    badge: 'Seasonal Wellness',
+    pricing: {
+      1: { price: 1999, mrp: 6663, discount: 70 },
+      2: { price: 3799, mrp: 13326, discount: 71 },
+      3: { price: 5499, mrp: 19989, discount: 72 },
+      4: { price: 6999, mrp: 26652, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Hydration & Electrolyte Balance',
+        tests: ['Sodium', 'Potassium', 'Chloride', 'Serum Osmolality']
+      },
+      {
+        category: 'Hepatic & Renal Protection',
+        tests: ['SGOT', 'SGPT', 'Bilirubin Total', 'Serum Creatinine', 'Uric Acid', 'BUN', 'Alkaline Phosphatase']
+      },
+      {
+        category: 'Blood & Infection Screening',
+        tests: ['CBC Complete Blood Count (24 tests)', 'ESR', 'Urine Specific Gravity & Routine (22 tests)', 'Fasting Glucose (9 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-summer-wellness-female',
+    slug: 'summer-wellness-female',
+    title: 'Diagnova Summer Wellness Package - Female',
+    category: 'Women Health',
+    tagline: 'Targeted hydration, electrolyte, calcium, vitamin & metabolic monitoring for women',
+    parametersCount: 68,
+    parametersSummary: 'Electrolytes • Hydration • Calcium • LFT • KFT • CBC',
+    tatText: 'Report in 24 hours',
+    baseMrp: 6663,
+    fastingHours: 8,
+    iconType: 'female',
+    badge: 'Seasonal Wellness',
+    pricing: {
+      1: { price: 1999, mrp: 6663, discount: 70 },
+      2: { price: 3799, mrp: 13326, discount: 71 },
+      3: { price: 5499, mrp: 19989, discount: 72 },
+      4: { price: 6999, mrp: 26652, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Hydration, Electrolytes & Bone Health',
+        tests: ['Sodium', 'Potassium', 'Chloride', 'Serum Calcium', 'Phosphorus']
+      },
+      {
+        category: 'Hepatic & Renal Balance',
+        tests: ['SGOT', 'SGPT', 'Bilirubin Total', 'Serum Creatinine', 'BUN', 'Uric Acid']
+      },
+      {
+        category: 'Blood Counts & Metabolic Screen',
+        tests: ['CBC Complete Blood Count (24 tests)', 'ESR', 'Fasting Blood Sugar', 'Urine Routine Extended (21 tests)', 'Lipid Screen (9 tests)']
+      }
+    ]
+  },
+  {
+    id: 'pkg-cancer-screening-female',
+    slug: 'cancer-screening-female',
+    title: 'Cancer Screening Package For Female',
+    category: 'Cancer Screening',
+    tagline: 'Targeted clinical oncological screening markers including CA-125 ovarian biomarker and CEA',
+    parametersCount: 12,
+    parametersSummary: 'CA-125 (Ovarian) • CEA • Complete Blood • ESR • Smear',
+    tatText: 'Report in 24 hours',
+    baseMrp: 3330,
+    fastingHours: 8,
+    iconType: 'female',
+    badge: 'Women Oncology',
+    pricing: {
+      1: { price: 999, mrp: 3330, discount: 70 },
+      2: { price: 1899, mrp: 6660, discount: 71 },
+      3: { price: 2699, mrp: 9990, discount: 73 },
+      4: { price: 3399, mrp: 13320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Tumor Markers & Oncology Screening',
+        tests: [
+          'CA-125 (Ovarian Cancer Marker)',
+          'CEA (Carcinoembryonic Antigen - GI & General Marker)',
+          'AFP (Alpha-Fetoprotein)'
+        ]
+      },
+      {
+        category: 'Cellular & Hematological Analysis',
+        tests: [
+          'Complete Blood Count (CBC - 6 tests)',
+          'Peripheral Blood Smear Examination',
+          'ESR (Erythrocyte Sedimentation Rate)',
+          'Total Leucocyte Count'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-cancer-screening-male',
+    slug: 'cancer-screening-male',
+    title: 'Cancer Screening Package For Male',
+    category: 'Cancer Screening',
+    tagline: 'Targeted clinical oncological screening markers including PSA prostate biomarker and CEA',
+    parametersCount: 12,
+    parametersSummary: 'PSA Total (Prostate) • CEA • Complete Blood • ESR • Smear',
+    tatText: 'Report in 24 hours',
+    baseMrp: 3330,
+    fastingHours: 8,
+    iconType: 'shield',
+    badge: 'Men Oncology',
+    pricing: {
+      1: { price: 999, mrp: 3330, discount: 70 },
+      2: { price: 1899, mrp: 6660, discount: 71 },
+      3: { price: 2699, mrp: 9990, discount: 73 },
+      4: { price: 3399, mrp: 13320, discount: 74 }
+    },
+    allParameters: [
+      {
+        category: 'Tumor Markers & Oncology Screening',
+        tests: [
+          'PSA Total (Prostate Specific Antigen)',
+          'CEA (Carcinoembryonic Antigen - GI & Colorectal Marker)',
+          'AFP (Alpha-Fetoprotein)'
+        ]
+      },
+      {
+        category: 'Cellular & Hematological Analysis',
+        tests: [
+          'Complete Blood Count (CBC - 6 tests)',
+          'Peripheral Blood Smear Examination',
+          'ESR (Erythrocyte Sedimentation Rate)',
+          'Total Leucocyte Count'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-diabetic-checkup-prime',
+    slug: 'diabetic-checkup-prime',
+    title: 'Diagnova Diabetic Checkup Prime',
+    category: 'Diabetes Care',
+    tagline: 'Vital preventative diabetes screening powered by gold-standard 3-month HbA1c & metabolic markers',
+    parametersCount: 44,
+    parametersSummary: 'HbA1c HPLC • Fasting Sugar • Lipid • KFT • Microalbumin',
+    tatText: 'Report in 6 hours',
+    baseMrp: 2330,
+    fastingHours: 10,
+    iconType: 'droplet',
+    badge: 'Diabetes Prime',
+    pricing: {
+      1: { price: 699, mrp: 2330, discount: 70 },
+      2: { price: 1299, mrp: 4660, discount: 72 },
+      3: { price: 1849, mrp: 6990, discount: 74 },
+      4: { price: 2299, mrp: 9320, discount: 75 }
+    },
+    allParameters: [
+      {
+        category: 'Diabetes & Glycemic Assessment (3 tests)',
+        tests: [
+          'HbA1c (Glycosylated Hemoglobin) - HPLC Method',
+          'Estimated Average Glucose (eAG)',
+          'Glucose (Fasting Blood Sugar)'
+        ]
+      },
+      {
+        category: 'Renal & Microvascular Protection (5 tests)',
+        tests: [
+          'Serum Creatinine', 'Blood Urea Nitrogen (BUN)', 'Urea', 'Uric Acid', 'Urine Microalbumin'
+        ]
+      },
+      {
+        category: 'Cardiovascular Lipid Profile (9 tests)',
+        tests: [
+          'Cholesterol Total', 'HDL Good Cholesterol', 'LDL Bad Cholesterol',
+          'Triglycerides', 'VLDL Cholesterol', 'Non-HDL Cholesterol',
+          'Total / HDL Ratio', 'LDL / HDL Ratio', 'HDL / LDL Ratio'
+        ]
+      },
+      {
+        category: 'Liver Vital Markers (3 tests)',
+        tests: ['SGOT / AST', 'SGPT / ALT', 'Bilirubin Total']
+      },
+      {
+        category: 'Urine Routine & Microscopic (24 tests)',
+        tests: [
+          'Urine Sugar', 'Urine Protein', 'Ketones', 'Pus Cells', 'RBCs',
+          'Epithelial Cells', 'Specific Gravity', 'pH', 'Bile Salt', 'Bile Pigment',
+          'Urobilinogen', 'Casts', 'Crystals', 'Bacteria', 'Others'
+        ]
+      }
+    ]
+  },
+  {
     id: 'pkg-cardiac-health-marker',
     slug: 'cardiac-health-marker-package',
     title: 'Cardiac Health Marker Package',
@@ -236,8 +658,8 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-cardiac-risk-special',
-    slug: 'healthians-cardiac-risk-special',
-    title: 'Healthians Cardiac Risk Special',
+    slug: 'diagnova-cardiac-risk-special',
+    title: 'Diagnova Cardiac Risk Special',
     category: 'Cardiac Care',
     tagline: 'Exhaustive cardio-metabolic evaluation spanning lipids, cardiac markers, CBC, liver & kidney panels',
     parametersCount: 71,
@@ -358,68 +780,8 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     ]
   },
   {
-    id: 'pkg-cancer-screening-male',
-    slug: 'cancer-screening-package-for-male',
-    title: 'Cancer Screening Package For Male',
-    category: 'Cancer Screening',
-    tagline: 'Targeted clinical oncology screening markers including PSA prostate, CEA colorectal & CA-19.9 pancreatic',
-    parametersCount: 3,
-    parametersSummary: 'PSA Prostate • CEA Colorectal • CA-19.9 Pancreatic',
-    tatText: 'Report in 23 Hrs.',
-    baseMrp: 2330,
-    fastingHours: 8,
-    iconType: 'shield',
-    badge: 'Oncology Male',
-    pricing: {
-      1: { price: 699, mrp: 2330, discount: 70 },
-      2: { price: 1349, mrp: 4660, discount: 71 },
-      3: { price: 1949, mrp: 6990, discount: 72 },
-      4: { price: 2499, mrp: 9320, discount: 73 }
-    },
-    allParameters: [
-      {
-        category: 'Tumor Markers & Oncology Screening (3 tests)',
-        tests: [
-          'PSA-total Prostate Specific Antigen (Prostate Cancer Marker Test)',
-          'CEA-Carcino Embryonic Antigen (Colorectal Cancer Marker Test)',
-          'CA-19.9 (Pancreatic Cancer Marker Test)'
-        ]
-      }
-    ]
-  },
-  {
-    id: 'pkg-cancer-screening-female',
-    slug: 'cancer-screening-package-for-female',
-    title: 'Cancer Screening Package For Female',
-    category: 'Cancer Screening',
-    tagline: 'Targeted clinical oncology screening markers including CA-125 ovarian, CA-15.3 breast & CEA colorectal',
-    parametersCount: 3,
-    parametersSummary: 'CA-125 Ovarian • CA-15.3 Breast • CEA Colorectal',
-    tatText: 'Report in 36 Hrs.',
-    baseMrp: 2330,
-    fastingHours: 8,
-    iconType: 'female',
-    badge: 'Oncology Female',
-    pricing: {
-      1: { price: 699, mrp: 2330, discount: 70 },
-      2: { price: 1349, mrp: 4660, discount: 71 },
-      3: { price: 1949, mrp: 6990, discount: 72 },
-      4: { price: 2499, mrp: 9320, discount: 73 }
-    },
-    allParameters: [
-      {
-        category: 'Tumor Markers & Oncology Screening (3 tests)',
-        tests: [
-          'CA-125 (Ovarian Cancer Marker Test)',
-          'CA-15.3 (Breast Cancer Marker Test)',
-          'CEA-Carcino Embryonic Antigen (Colorectal Cancer Marker Test)'
-        ]
-      }
-    ]
-  },
-  {
     id: 'pkg-cancer-screening-male-comp',
-    slug: 'healthians-cancer-screening-package-male',
+    slug: 'diagnova-cancer-screening-package-male',
     title: 'Comprehensive Cancer Screening Package For Male',
     category: 'Cancer Screening',
     tagline: 'Broad oncological surveillance with AFP liver, PSA Total & Free, CEA and CA-19.9 biomarkers',
@@ -481,7 +843,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-thyroid-health-assessment',
-    slug: 'healthians-thyroid-health-diagnostic-package',
+    slug: 'diagnova-thyroid-health-diagnostic-package',
     title: 'Thyroid Health Assessment Package',
     category: 'Thyroid Care',
     tagline: 'Comprehensive assessment combining total thyroid hormones with unbound Free T3 and Free T4',
@@ -518,8 +880,8 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-thyroid-plus-checkup',
-    slug: 'healthians-prime-care-thyroid-plus',
-    title: 'Healthians Prime Care Thyroid Plus Checkup Package',
+    slug: 'diagnova-prime-care-thyroid-plus',
+    title: 'Diagnova Prime Care Thyroid Plus Checkup Package',
     category: 'Thyroid Care',
     tagline: 'All-inclusive full body profile integrating thyroid surveillance with CBC, liver, renal & lipid systems',
     parametersCount: 79,
@@ -648,9 +1010,9 @@ export const FEATURED_PACKAGES: PackageItem[] = [
     ]
   },
   {
-    id: 'pkg-healthians-diabetic-checkup',
-    slug: 'healthians-diabetic-checkup',
-    title: 'Healthians Diabetic Checkup',
+    id: 'pkg-diagnova-diabetic-checkup',
+    slug: 'diagnova-diabetic-checkup',
+    title: 'Diagnova Diabetic Checkup',
     category: 'Diabetes Care',
     tagline: 'Gold-standard diabetes management combining 3-month HbA1c, fasting glucose, KFT and lipid profile',
     parametersCount: 44,
@@ -1464,7 +1826,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   {
     id: 'pkg-hormonal-imbalance-female',
     slug: 'hormonal-imbalance-female-package',
-    title: 'Healthians Hormonal Imbalance Female Package',
+    title: 'Diagnova Hormonal Imbalance Female Package',
     category: 'Hormone Health',
     tagline: 'Comprehensive endocrinology panel covering AMH ovarian reserve, PCOS markers, insulin resistance & thyroid',
     parametersCount: 25,
@@ -1531,7 +1893,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   {
     id: 'pkg-hormonal-imbalance-male',
     slug: 'hormonal-imbalance-male-package',
-    title: 'Healthians Hormonal Imbalance Male Package',
+    title: 'Diagnova Hormonal Imbalance Male Package',
     category: 'Hormone Health',
     tagline: 'Deep andrologic assessment of testosterone bio-availability, SHBG, prolactin, adrenal cortisol & insulin',
     parametersCount: 24,
@@ -1596,7 +1958,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-hormone-health-female',
-    slug: 'healthians-hormone-level-diagnostic-package-female',
+    slug: 'diagnova-hormone-level-diagnostic-package-female',
     title: 'Hormone Health Assessment Female',
     category: 'Hormone Health',
     tagline: 'Focused female reproductive hormone profile testing fertility, menstrual cycle regularities & menopause',
@@ -1632,7 +1994,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-platinum-cardiac-screening',
-    slug: 'healthians-mygenome-wellness-dna-cardiomet-test',
+    slug: 'diagnova-mygenome-wellness-dna-cardiomet-test',
     title: 'Platinum Cardiac Screening (Heart Health) Package',
     category: 'Genomic & DNA',
     tagline: 'Precision cardiometabolic DNA sequencing mapped with authentic biochemical lipid & cardiac markers',
@@ -1692,7 +2054,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-dna-skin-beauty',
-    slug: 'healthians-mygenome-wellness-dna-skin-test',
+    slug: 'diagnova-mygenome-wellness-dna-skin-test',
     title: 'DNA Skin & Beauty Package',
     category: 'Genomic & DNA',
     tagline: 'Cellular genomic roadmap uncovering collagen degradation, antioxidant capacity, photoaging & elasticity',
@@ -1735,7 +2097,7 @@ export const FEATURED_PACKAGES: PackageItem[] = [
   },
   {
     id: 'pkg-comprehensive-dna',
-    slug: 'healthians-mygenome-wellness-comprehensive-dna-package',
+    slug: 'diagnova-mygenome-wellness-comprehensive-dna-package',
     title: 'Comprehensive DNA Package',
     category: 'Genomic & DNA',
     tagline: 'Ultimate whole-genome predisposition roadmap covering 81 traits across nutrition, fitness, sleep, cardiac & longevity',
