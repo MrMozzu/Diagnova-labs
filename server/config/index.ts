@@ -19,12 +19,12 @@ export const config = {
   notifications: {
     adminWhatsApp: (process.env.ADMIN_WHATSAPP_PHONE || '918217689128').replace(/[\s\-\+\(\)]/g, ''),
     smtp: {
-      host: process.env.SMTP_HOST || '',
-      port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: process.env.SMTP_SECURE === 'true',
-      user: process.env.SMTP_USER || '',
-      pass: process.env.SMTP_PASS || '',
-      from: process.env.SMTP_FROM || '"Diagnova Labs" <no-reply@diagnovalabs.com>'
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '465', 10),
+      secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+      user: process.env.SMTP_USER || 'diagnovalabs@gmail.com',
+      pass: (process.env.SMTP_PASS || '').replace(/\s+/g, ''),
+      from: process.env.SMTP_FROM || '"Diagnova Labs" <diagnovalabs@gmail.com>'
     },
     whatsappWebhookUrl: process.env.WHATSAPP_WEBHOOK_URL || ''
   },

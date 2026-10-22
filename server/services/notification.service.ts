@@ -9,18 +9,29 @@ export class NotificationService {
     if (this.transporter) return this.transporter;
 
     const { smtp } = config.notifications;
-    if (smtp.host && smtp.user && smtp.pass) {
+    if (smtp.user && smtp.pass) {
       try {
-        this.transporter = nodemailer.createTransport({
-          host: smtp.host,
-          port: smtp.port,
-          secure: smtp.secure,
-          auth: {
-            user: smtp.user,
-            pass: smtp.pass
-          }
-        });
-        console.log('📧 [NotificationService] SMTP Transporter initialized successfully.');
+        const isGmail = smtp.user.toLowerCase().includes('@gmail.com') || (smtp.host && smtp.host.includes('gmail'));
+        const transportOpts: any = isGmail
+          ? {
+              service: 'gmail',
+              auth: {
+                user: smtp.user,
+                pass: smtp.pass
+              }
+            }
+          : {
+              host: smtp.host,
+              port: smtp.port,
+              secure: smtp.secure,
+              auth: {
+                user: smtp.user,
+                pass: smtp.pass
+              }
+            };
+
+        this.transporter = nodemailer.createTransport(transportOpts);
+        console.log(`📧 [NotificationService] SMTP Transporter initialized successfully (${isGmail ? 'Gmail Service' : smtp.host}).`);
       } catch (err) {
         console.warn('⚠️ [NotificationService] Failed to initialize SMTP transporter:', err);
       }
