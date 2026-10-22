@@ -14,21 +14,21 @@ export class NotificationService {
         const isGmail = smtp.user.toLowerCase().includes('@gmail.com') || (smtp.host && smtp.host.includes('gmail'));
         const transportOpts: any = isGmail
           ? {
-              service: 'gmail',
-              auth: {
-                user: smtp.user,
-                pass: smtp.pass
-              }
+            service: 'gmail',
+            auth: {
+              user: smtp.user,
+              pass: smtp.pass
             }
+          }
           : {
-              host: smtp.host,
-              port: smtp.port,
-              secure: smtp.secure,
-              auth: {
-                user: smtp.user,
-                pass: smtp.pass
-              }
-            };
+            host: smtp.host,
+            port: smtp.port,
+            secure: smtp.secure,
+            auth: {
+              user: smtp.user,
+              pass: smtp.pass
+            }
+          };
 
         this.transporter = nodemailer.createTransport(transportOpts);
         console.log(`📧 [NotificationService] SMTP Transporter initialized successfully (${isGmail ? 'Gmail Service' : smtp.host}).`);
@@ -44,11 +44,11 @@ export class NotificationService {
    */
   public static formatWhatsAppMessage(booking: Booking): string {
     const isPaid = booking.paymentStatus === 'paid' || booking.paymentMethod === 'online_upi';
-    const payModeText = booking.paymentMethod === 'online_upi' 
-      ? 'Online UPI (Verified Paid)' 
+    const payModeText = booking.paymentMethod === 'online_upi'
+      ? 'Online UPI (Verified Paid)'
       : booking.paymentMethod === 'online_card'
-      ? 'Online Card (Verified Paid)'
-      : 'Cash on Sample Collection (Pay on Visit)';
+        ? 'Online Card (Verified Paid)'
+        : 'Cash on Sample Collection (Pay on Visit)';
 
     return [
       `🚨 *NEW LAB BOOKING RECEIVED - DIAGNOVA LABS* 🚨`,

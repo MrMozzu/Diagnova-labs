@@ -1,7 +1,8 @@
 import type { Booking, CallbackLead, PatientInfo, CartItem, TestItem, PackageItem } from '../types';
 import { lookupPincode, isValidPincodeFormat, type PincodeLookupResponse } from '../data/pincodes';
 
-const API_BASE = '/api';
+const RAW_API_URL = (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_API_BASE_URL || import.meta.env?.VITE_API_URL)) || '';
+const API_BASE = RAW_API_URL ? RAW_API_URL.replace(/\/+$/, '') : '/api';
 
 export class ApiClient {
   private static async requestJson(url: string, init?: RequestInit, defaultErrorMessage = 'Server request failed'): Promise<any> {

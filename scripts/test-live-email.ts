@@ -27,7 +27,7 @@ async function testEmailDelivery() {
     patient: {
       fullName: 'Aarav Singhania',
       phone: '9826012345',
-      email: 'quantumfox@gmail.com',
+      email: 'quantumfox20@gmail.com',
       age: 29,
       gender: 'Male',
       address: 'Penthouse 12-A, Green Valley Heights, E-8 Arera Colony',
