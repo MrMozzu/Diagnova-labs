@@ -5,6 +5,7 @@ import { FEATURED_PACKAGES } from '../data/packages';
 import type { Booking, CartItem } from '../types';
 import { showToast } from '../utils/toast';
 import { ValidationService } from '../services/validation.service';
+import { RazorpayService } from '../services/razorpay.service';
 
 // Multi-person counts per package
 const packagePersons: Record<string, number> = {
@@ -406,7 +407,11 @@ export function renderBookingDrawer() {
             ` : ''}
 
             <button class="btn-pill-primary" id="drawer-next-step-btn" style="flex: 1; justify-content: center; padding: 13px 20px;">
-              ${checkoutStep === 4 ? `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔` : 'Proceed to Next Step ➔'}
+              ${checkoutStep === 4 
+                ? (selectedPaymentMethod === 'online_upi' 
+                    ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒` 
+                    : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`) 
+                : 'Proceed to Next Step ➔'}
             </button>
           </div>
         </div>
@@ -453,6 +458,12 @@ export function renderBookingDrawer() {
         selectedPaymentMethod = (e.target as HTMLInputElement).value as any;
         document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('active'));
         (radio.closest('.payment-method-card') as HTMLElement)?.classList.add('active');
+        const nextBtn = document.getElementById('drawer-next-step-btn');
+        if (nextBtn && activeBookingItem) {
+          nextBtn.textContent = selectedPaymentMethod === 'online_upi'
+            ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒`
+            : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`;
+        }
       });
     });
   }
@@ -703,8 +714,8 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
       <label class="payment-method-card ${selectedPaymentMethod === 'online_upi' ? 'active' : ''}">
         <input type="radio" name="payment-method" value="online_upi" ${selectedPaymentMethod === 'online_upi' ? 'checked' : ''} />
         <div class="payment-method-content">
-          <div class="payment-method-title">⚡ Pay Online via UPI / Cards / NetBanking</div>
-          <div class="payment-method-desc">Instant confirmation with digital invoice receipt (GPay, PhonePe, Paytm, Cards)</div>
+          <div class="payment-method-title">⚡ Pay Online (Razorpay: UPI, Cards, NetBanking, Wallets)</div>
+          <div class="payment-method-desc">Instant online payment via Razorpay secure checkout (GPay, PhonePe, Paytm, Cards)</div>
         </div>
       </label>
 
@@ -795,6 +806,49 @@ async function executeBooking() {
 
   const cartItems = activeBookingItem.type === 'cart' ? store.getCart() : undefined;
 
+  let paymentVerified = false;
+  let razorpayPaymentId: string | undefined;
+
+  // Razorpay Standard Web Checkout for Online Payment
+  if (selectedPaymentMethod === 'online_upi') {
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Opening Razorpay Gateway...';
+    }
+
+    try {
+      const paymentResult = await RazorpayService.openCheckout({
+        amountInRupees: activeBookingItem.price,
+        itemName: activeBookingItem.name,
+        patient: {
+          fullName: patientName,
+          email: patientFormData.email,
+          phone: patientPhone
+        }
+      });
+
+      if (!paymentResult.isVerified) {
+        throw new Error('Payment verification failed. Signature mismatch.');
+      }
+
+      paymentVerified = true;
+      razorpayPaymentId = paymentResult.paymentId;
+      console.log(`✅ [Razorpay] Payment verified. Transaction ID: ${razorpayPaymentId}`);
+    } catch (payErr: any) {
+      console.warn('Razorpay checkout interrupted:', payErr);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒`;
+      }
+      return;
+    }
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Securing Booking...';
+  }
+
   try {
     const booking = await store.createBooking({
       itemType: activeBookingItem.type,
@@ -810,7 +864,7 @@ async function executeBooking() {
       collectionFee: 0,
       totalAmount: activeBookingItem.price,
       paymentMethod: selectedPaymentMethod,
-      paymentStatus: selectedPaymentMethod === 'online_upi' ? 'paid' : 'pending',
+      paymentStatus: paymentVerified ? 'paid' : (selectedPaymentMethod === 'online_upi' ? 'paid' : 'pending'),
       patient: {
         fullName: patientName,
         phone: patientPhone,

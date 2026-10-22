@@ -153,4 +153,41 @@ export class ApiClient {
     }
     return { success: false };
   }
+
+  public static async createRazorpayOrder(params: {
+    amount: number;
+    currency?: string;
+    receipt?: string;
+    notes?: Record<string, string>;
+  }): Promise<{ success?: boolean; order_id: string; id?: string; amount: number; currency: string; receipt?: string }> {
+    const res = await fetch(`${API_BASE}/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+
+    const body = await res.json();
+    if (!res.ok) {
+      throw new Error(body.error || 'Failed to create Razorpay order');
+    }
+    return body;
+  }
+
+  public static async verifyRazorpayPayment(payload: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+  }): Promise<{ success: boolean; isVerified: boolean; message?: string; error?: string }> {
+    const res = await fetch(`${API_BASE}/verify-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const body = await res.json();
+    if (!res.ok) {
+      throw new Error(body.error || 'Payment signature verification failed');
+    }
+    return body;
+  }
 }

@@ -27,5 +27,9 @@ export const config = {
       from: process.env.SMTP_FROM || '"Diagnova Labs" <no-reply@diagnovalabs.com>'
     },
     whatsappWebhookUrl: process.env.WHATSAPP_WEBHOOK_URL || ''
+  },
+  razorpay: {
+    keyId: process.env.RAZORPAY_KEY_ID || '',
+    keySecret: process.env.RAZORPAY_KEY_SECRET || ''
   }
 };

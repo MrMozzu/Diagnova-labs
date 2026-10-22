@@ -13,6 +13,7 @@ import { bookingsRouter } from './routes/bookings.routes';
 import { callbacksRouter } from './routes/callbacks.routes';
 import { pincodeRouter } from './routes/pincode.routes';
 import { notificationsRouter } from './routes/notifications.routes';
+import { paymentsRouter } from './routes/payments.routes';
 
 export function createApp() {
   const app = express();
@@ -35,6 +36,8 @@ export function createApp() {
   app.use('/api/callbacks', callbacksRouter);
   app.use('/api/pincode', pincodeRouter);
   app.use('/api/notifications', notificationsRouter);
+  app.use('/api', paymentsRouter);
+  app.use('/api/payments', paymentsRouter);
 
   // 4. 404 Catch-All
   app.use((_req, res) => {
