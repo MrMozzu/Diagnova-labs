@@ -12,6 +12,11 @@ export class SlotService {
   public static readonly MAX_SLOT_CAPACITY = 3; // Max simultaneous phlebotomists per pincode/slot
 
   public static readonly AVAILABLE_SLOTS = [
+    '06:30 AM - 07:30 AM (Express Morning)',
+    '07:30 AM - 08:30 AM (Popular)',
+    '08:30 AM - 09:30 AM',
+    '09:30 AM - 10:30 AM',
+    '10:30 AM - 11:30 AM',
     '06:00 AM - 07:00 AM (Early Fasting)',
     '07:00 AM - 08:00 AM (Fasting Preferred)',
     '08:00 AM - 09:00 AM (Fasting Preferred)',

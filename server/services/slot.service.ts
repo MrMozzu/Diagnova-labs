@@ -3,6 +3,11 @@ import { config } from '../config';
 
 export class ServerSlotService {
   public static readonly DEFAULT_SLOTS = [
+    '06:30 AM - 07:30 AM (Express Morning)',
+    '07:30 AM - 08:30 AM (Popular)',
+    '08:30 AM - 09:30 AM',
+    '09:30 AM - 10:30 AM',
+    '10:30 AM - 11:30 AM',
     '06:00 AM - 07:00 AM (Early Fasting)',
     '07:00 AM - 08:00 AM (Fasting Preferred)',
     '08:00 AM - 09:00 AM (Fasting Preferred)',
@@ -62,8 +67,18 @@ export class ServerSlotService {
   }
 
   public static async isSlotAvailable(date: string, slot: string, pincode: string): Promise<boolean> {
-    const slots = await this.getSlotAvailability(date, pincode);
-    const target = slots.find(s => s.slot === slot);
-    return target ? target.isAvailable : false;
+    const dateCheck = this.validateDate(date);
+    if (!dateCheck.isValid) return false;
+
+    const bookings = await db.getBookings();
+    const activeBookings = bookings.filter(b => b.status !== 'cancelled');
+
+    const bookedCount = activeBookings.filter(b => 
+      b.scheduledDate === date && 
+      b.scheduledSlot === slot &&
+      (!b.patient?.pincode || b.patient.pincode === pincode)
+    ).length;
+
+    return bookedCount < config.business.maxSlotCapacity;
   }
 }

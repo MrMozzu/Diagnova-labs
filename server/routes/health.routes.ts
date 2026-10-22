@@ -4,6 +4,9 @@ import { config } from '../config';
 export const healthRouter = Router();
 
 healthRouter.get('/', (_req: Request, res: Response) => {
+  const hasUrl = Boolean(config.supabase.url);
+  const hasKey = Boolean(config.supabase.anonKey);
+
   res.json({
     success: true,
     status: 'HEALTHY',
@@ -12,7 +15,12 @@ healthRouter.get('/', (_req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     uptimeSeconds: process.uptime(),
     environment: config.nodeEnv,
-    supabaseConnected: Boolean(config.supabase.url && config.supabase.anonKey),
+    supabaseConnected: hasUrl && hasKey,
+    supabaseDetails: {
+      hasUrl,
+      hasKey,
+      detectedKeysInEnv: Object.keys(process.env).filter(k => k.toUpperCase().includes('SUPABASE'))
+    },
     memoryUsageMB: {
       rss: Math.round(process.memoryUsage().rss / 1024 / 1024),
       heapTotal: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),

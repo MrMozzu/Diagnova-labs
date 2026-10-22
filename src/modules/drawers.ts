@@ -6,6 +6,7 @@ import type { Booking, CartItem } from '../types';
 import { showToast } from '../utils/toast';
 import { ValidationService } from '../services/validation.service';
 import { RazorpayService } from '../services/razorpay.service';
+import { PricingService } from '../services/pricing.service';
 
 // Multi-person counts per package
 const packagePersons: Record<string, number> = {
@@ -36,7 +37,6 @@ let activeBookingItem: {
 
 let checkoutStep = 1;
 let selectedSlot = '06:30 AM - 07:30 AM (Express Morning)';
-let isExpressSlot = true;
 let selectedPaymentMethod: 'online_upi' | 'cash_on_collection' = 'online_upi';
 
 // Patient Details Form State (Persistent across step navigation & genuine user storage)
@@ -369,6 +369,8 @@ export function renderBookingDrawer() {
   });
 
   const stepTitles = ['Patient Details', 'Date & Slot', 'Home Address', 'Review & Pay'];
+  const collectionFee = activeBookingItem.price >= PricingService.FREE_COLLECTION_THRESHOLD ? 0 : PricingService.STANDARD_COLLECTION_FEE;
+  const totalPayable = activeBookingItem.price + collectionFee;
 
   modalsRoot.innerHTML = `
     <div class="drawer-overlay active" id="booking-drawer-overlay">
@@ -396,7 +398,7 @@ export function renderBookingDrawer() {
         <div class="drawer-footer">
           <div class="drawer-footer-price-info">
             <span class="drawer-footer-price-label">Total Amount Payable</span>
-            <div class="drawer-footer-price">₹ ${activeBookingItem.price.toLocaleString('en-IN')}</div>
+            <div class="drawer-footer-price">₹ ${totalPayable.toLocaleString('en-IN')}</div>
           </div>
 
           <div style="display: flex; gap: 10px;">
@@ -409,8 +411,8 @@ export function renderBookingDrawer() {
             <button class="btn-pill-primary" id="drawer-next-step-btn" style="flex: 1; justify-content: center; padding: 13px 20px;">
               ${checkoutStep === 4 
                 ? (selectedPaymentMethod === 'online_upi' 
-                    ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒` 
-                    : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`) 
+                    ? `Pay ₹${totalPayable.toLocaleString('en-IN')} via UPI / Razorpay 🔒` 
+                    : `Confirm Booking (₹ ${totalPayable.toLocaleString('en-IN')}) ➔`) 
                 : 'Proceed to Next Step ➔'}
             </button>
           </div>
@@ -446,7 +448,6 @@ export function renderBookingDrawer() {
         document.querySelectorAll('.slot-radio-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         selectedSlot = card.getAttribute('data-slot') || selectedSlot;
-        isExpressSlot = card.classList.contains('express');
       });
     });
   }
@@ -461,8 +462,8 @@ export function renderBookingDrawer() {
         const nextBtn = document.getElementById('drawer-next-step-btn');
         if (nextBtn && activeBookingItem) {
           nextBtn.textContent = selectedPaymentMethod === 'online_upi'
-            ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒`
-            : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`;
+            ? `Pay ₹${totalPayable.toLocaleString('en-IN')} via UPI / Razorpay 🔒`
+            : `Confirm Booking (₹ ${totalPayable.toLocaleString('en-IN')}) ➔`;
         }
       });
     });
@@ -686,26 +687,35 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
     </div>
 
     <!-- BILL BREAKUP -->
-    <div class="order-review-box" style="margin-top: 14px; background: #fff;">
-      <div class="review-row">
-        <span>Item Total (MRP)</span>
-        <span>₹ ${activeBookingItem.mrp.toLocaleString('en-IN')}</span>
-      </div>
-      ${activeBookingItem.mrp > activeBookingItem.price ? `
-        <div class="review-row" style="color: #16a34a;">
-          <span>Package Bundle Discount</span>
-          <span>- ₹ ${(activeBookingItem.mrp - activeBookingItem.price).toLocaleString('en-IN')}</span>
+    ${(() => {
+      const stepCollectionFee = activeBookingItem.price >= PricingService.FREE_COLLECTION_THRESHOLD ? 0 : PricingService.STANDARD_COLLECTION_FEE;
+      const stepTotalPayable = activeBookingItem.price + stepCollectionFee;
+      return `
+        <div class="order-review-box" style="margin-top: 14px; background: #fff;">
+          <div class="review-row">
+            <span>Item Total (MRP)</span>
+            <span>₹ ${activeBookingItem.mrp.toLocaleString('en-IN')}</span>
+          </div>
+          ${activeBookingItem.mrp > activeBookingItem.price ? `
+            <div class="review-row" style="color: #16a34a;">
+              <span>Package Bundle Discount</span>
+              <span>- ₹ ${(activeBookingItem.mrp - activeBookingItem.price).toLocaleString('en-IN')}</span>
+            </div>
+          ` : ''}
+          <div class="review-row">
+            <span>Doorstep Collection Fee</span>
+            ${stepCollectionFee === 0 
+              ? `<span style="color: #16a34a; font-weight: 700;">FREE <span style="text-decoration: line-through; color: #94a3b8; font-size: 0.75rem;">₹150</span></span>` 
+              : `<span style="color: #0f172a; font-weight: 700;">₹ ${stepCollectionFee} <span style="font-size: 0.72rem; color: #64748b;">(Orders below ₹500)</span></span>`
+            }
+          </div>
+          <div class="review-row" style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; margin-top: 8px; font-size: 1.05rem; font-weight: 800; color: #0f172a;">
+            <span>Total Payable</span>
+            <span style="color: #e27a3f;">₹ ${stepTotalPayable.toLocaleString('en-IN')}</span>
+          </div>
         </div>
-      ` : ''}
-      <div class="review-row">
-        <span>Doorstep Collection Fee</span>
-        <span style="color: #16a34a; font-weight: 700;">FREE <span style="text-decoration: line-through; color: #94a3b8; font-size: 0.75rem;">₹150</span></span>
-      </div>
-      <div class="review-row" style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; margin-top: 8px; font-size: 1.05rem; font-weight: 800; color: #0f172a;">
-        <span>Total Payable</span>
-        <span style="color: #e27a3f;">₹ ${activeBookingItem.price.toLocaleString('en-IN')}</span>
-      </div>
-    </div>
+      `;
+    })()}
 
     <!-- PAYMENT METHOD OPTIONS -->
     <h5 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin: 18px 0 10px 0;">Select Payment Method</h5>
@@ -814,6 +824,9 @@ async function executeBooking() {
 
   const cartItems = activeBookingItem.type === 'cart' ? store.getCart() : undefined;
 
+  const collectionFee = activeBookingItem.price >= PricingService.FREE_COLLECTION_THRESHOLD ? 0 : PricingService.STANDARD_COLLECTION_FEE;
+  const totalPayable = activeBookingItem.price + collectionFee;
+
   let paymentVerified = false;
   let razorpayPaymentId: string | undefined;
 
@@ -826,7 +839,7 @@ async function executeBooking() {
 
     try {
       const paymentResult = await RazorpayService.openCheckout({
-        amountInRupees: activeBookingItem.price,
+        amountInRupees: totalPayable,
         itemName: activeBookingItem.name,
         patient: {
           fullName: patientName,
@@ -846,7 +859,7 @@ async function executeBooking() {
       console.warn('Razorpay checkout interrupted:', payErr);
       if (btn) {
         btn.disabled = false;
-        btn.textContent = `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒`;
+        btn.textContent = `Pay ₹${totalPayable.toLocaleString('en-IN')} via UPI / Razorpay 🔒`;
       }
       return;
     }
@@ -866,11 +879,11 @@ async function executeBooking() {
       persons: activeBookingItem.persons,
       scheduledDate: scheduledDate,
       scheduledSlot: selectedSlot,
-      isExpress: isExpressSlot,
+      isExpress: false,
       baseAmount: activeBookingItem.mrp,
       discountAmount: activeBookingItem.mrp - activeBookingItem.price,
-      collectionFee: 0,
-      totalAmount: activeBookingItem.price,
+      collectionFee: collectionFee,
+      totalAmount: totalPayable,
       paymentMethod: selectedPaymentMethod,
       paymentStatus: paymentVerified ? 'paid' : (selectedPaymentMethod === 'online_upi' ? 'paid' : 'pending'),
       patient: {
@@ -925,7 +938,7 @@ async function executeBooking() {
     showToast(`⚠️ Booking error: ${err.message || 'Please check details and retry'}`);
     if (btn) {
       btn.disabled = false;
-      btn.textContent = `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`;
+      btn.textContent = `Confirm Booking (₹ ${totalPayable.toLocaleString('en-IN')}) ➔`;
     }
   }
 }

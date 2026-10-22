@@ -3,6 +3,7 @@ import { getSupabase } from '../lib/supabase';
 import { PricingService } from './pricing.service';
 import { ValidationService } from './validation.service';
 import { SlotService } from './slot.service';
+import { ApiClient } from './api';
 
 const LOCAL_STORAGE_BOOKINGS_KEY = 'tbl_bookings_v1';
 const LOCAL_STORAGE_CALLBACKS_KEY = 'tbl_callbacks_v1';
@@ -327,7 +328,42 @@ class AppStore {
     existing.unshift(newBooking);
     safeStorage.setItem(LOCAL_STORAGE_BOOKINGS_KEY, JSON.stringify(existing));
 
-    // Async sync to Supabase if configured
+    // 1. Sync to backend API (handles server database persistence + instant patient email & WhatsApp alerts)
+    try {
+      const serverBooking = await ApiClient.createBooking({
+        itemType: params.itemType,
+        itemId: params.itemId,
+        itemName: params.itemName,
+        items: params.items,
+        persons: params.persons,
+        scheduledDate: params.scheduledDate,
+        scheduledSlot: params.scheduledSlot,
+        isExpress: params.isExpress,
+        baseAmount: safeBaseAmount,
+        discountAmount: safeDiscountAmount,
+        collectionFee: safeCollectionFee,
+        totalAmount: safeTotalAmount,
+        paymentMethod: params.paymentMethod,
+        patient: params.patient
+      });
+
+      if (serverBooking && serverBooking.id) {
+        // Sync local list with authoritative server booking
+        const list = this.getLocalBookings();
+        const idx = list.findIndex(b => b.id === bookingId);
+        if (idx !== -1) {
+          list[idx] = serverBooking;
+        } else {
+          list.unshift(serverBooking);
+        }
+        safeStorage.setItem(LOCAL_STORAGE_BOOKINGS_KEY, JSON.stringify(list));
+        return serverBooking;
+      }
+    } catch (apiErr) {
+      console.warn('Backend API booking creation deferred or offline:', apiErr);
+    }
+
+    // 2. Direct client fallback sync to Supabase if backend was unreachable
     const supabase = await getSupabase();
     if (supabase) {
       try {
