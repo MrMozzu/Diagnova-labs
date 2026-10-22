@@ -113,8 +113,14 @@ export class RazorpayService {
         order_id: orderId,
         prefill: {
           name: options.patient.fullName,
-          email: options.patient.email || '',
-          contact: options.patient.phone
+          email: options.patient.email || 'patient@diagnovalabs.com',
+          contact: options.patient.phone.replace(/\D/g, '').slice(-10) || '9876543210'
+        },
+        method: {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true
         },
         theme: {
           color: '#1b449c'

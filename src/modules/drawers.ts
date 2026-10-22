@@ -409,7 +409,7 @@ export function renderBookingDrawer() {
             <button class="btn-pill-primary" id="drawer-next-step-btn" style="flex: 1; justify-content: center; padding: 13px 20px;">
               ${checkoutStep === 4 
                 ? (selectedPaymentMethod === 'online_upi' 
-                    ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒` 
+                    ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒` 
                     : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`) 
                 : 'Proceed to Next Step ➔'}
             </button>
@@ -461,7 +461,7 @@ export function renderBookingDrawer() {
         const nextBtn = document.getElementById('drawer-next-step-btn');
         if (nextBtn && activeBookingItem) {
           nextBtn.textContent = selectedPaymentMethod === 'online_upi'
-            ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒`
+            ? `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒`
             : `Confirm Booking (₹ ${activeBookingItem.price.toLocaleString('en-IN')}) ➔`;
         }
       });
@@ -714,8 +714,16 @@ function renderDrawerStepContent(dateOptions: { iso: string; display: string }[]
       <label class="payment-method-card ${selectedPaymentMethod === 'online_upi' ? 'active' : ''}">
         <input type="radio" name="payment-method" value="online_upi" ${selectedPaymentMethod === 'online_upi' ? 'checked' : ''} />
         <div class="payment-method-content">
-          <div class="payment-method-title">⚡ Pay Online (Razorpay: UPI, Cards, NetBanking, Wallets)</div>
-          <div class="payment-method-desc">Instant online payment via Razorpay secure checkout (GPay, PhonePe, Paytm, Cards)</div>
+          <div class="payment-method-title" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <span>⚡ Pay Online via UPI / Cards / NetBanking</span>
+            <span style="display: inline-flex; gap: 4px; font-size: 0.68rem; font-weight: 800;">
+              <span style="background: #e0f2fe; color: #0284c7; padding: 2px 6px; border-radius: 4px;">UPI</span>
+              <span style="background: #ecfdf5; color: #059669; padding: 2px 6px; border-radius: 4px;">GPAY</span>
+              <span style="background: #fdf2f8; color: #be185d; padding: 2px 6px; border-radius: 4px;">PHONEPE</span>
+              <span style="background: #fef3c7; color: #d97706; padding: 2px 6px; border-radius: 4px;">PAYTM</span>
+            </span>
+          </div>
+          <div class="payment-method-desc">Instant online payment with Razorpay: Google Pay, PhonePe, Paytm, QR Code, Cards, or NetBanking</div>
         </div>
       </label>
 
@@ -838,7 +846,7 @@ async function executeBooking() {
       console.warn('Razorpay checkout interrupted:', payErr);
       if (btn) {
         btn.disabled = false;
-        btn.textContent = `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} with Razorpay 🔒`;
+        btn.textContent = `Pay ₹${activeBookingItem.price.toLocaleString('en-IN')} via UPI / Razorpay 🔒`;
       }
       return;
     }
