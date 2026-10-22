@@ -207,6 +207,12 @@ function renderPackagesPageView(): string {
             <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Compare All Health Packages</h3>
             <p style="font-size: 0.88rem; color: #64748b;">Detailed side-by-side inclusion matrix across vital organ systems with guaranteed 24-hour digital reports.</p>
           </div>
+          
+          <div class="mobile-table-scroll-hint">
+            <span>👉</span>
+            <span>Swipe left &amp; right to compare packages</span>
+            <span>👈</span>
+          </div>
 
           <div class="comparison-table-wrapper">
             <table class="comparison-table">
