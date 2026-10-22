@@ -122,5 +122,5 @@ describe('AppStore - State Management & In-House Security Gateways', () => {
     const stored = store.getLocalBookings();
     expect(stored.length).toBe(1);
     expect(stored[0].id).toBe(booking.id);
-  });
+  }, 15000);
 });

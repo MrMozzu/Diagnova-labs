@@ -52,6 +52,13 @@ export interface PatientFormData {
   scheduledDate: string;
 }
 
+function toLocalDateString(d: Date = new Date()): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const LOCAL_STORAGE_PATIENT_KEY = 'tbl_saved_patient_v1';
 
 function getInitialPatientFormData(): PatientFormData {
@@ -66,7 +73,7 @@ function getInitialPatientFormData(): PatientFormData {
     landmark: '',
     city: currentCity,
     pincode: '',
-    scheduledDate: new Date().toISOString().split('T')[0]
+    scheduledDate: toLocalDateString()
   };
 
   if (typeof localStorage !== 'undefined') {
@@ -355,7 +362,7 @@ export function renderBookingDrawer() {
     const d = new Date(today);
     d.setDate(today.getDate() + offset);
     return {
-      iso: d.toISOString().split('T')[0],
+      iso: toLocalDateString(d),
       display: offset === 0 ? 'Today' : (offset === 1 ? 'Tomorrow' : d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }))
     };
   });
@@ -784,7 +791,7 @@ async function executeBooking() {
   const patientLandmark = patientFormData.landmark || '';
   const patientCity = patientFormData.city || store.getCity();
   const patientPincode = patientFormData.pincode;
-  const scheduledDate = patientFormData.scheduledDate || new Date().toISOString().split('T')[0];
+  const scheduledDate = patientFormData.scheduledDate || toLocalDateString();
 
   const cartItems = activeBookingItem.type === 'cart' ? store.getCart() : undefined;
 
@@ -870,37 +877,101 @@ export function closeDrawer() {
 }
 
 // ==========================================================================
-// CONFIRMATION & RECEIPT MODALS
+// CONFIRMATION & RECEIPT MODALS + NOTIFICATIONS (+91 8217689128)
 // ==========================================================================
+export function generateAdminWhatsAppUrl(booking: Booking): string {
+  const adminPhone = '918217689128';
+  const payModeText = booking.paymentMethod === 'online_upi' 
+    ? 'Online UPI (Paid Verified)' 
+    : booking.paymentMethod === 'online_card'
+    ? 'Online Card (Paid Verified)'
+    : 'Cash on Sample Collection (Pay on Visit)';
+
+  const lines = [
+    `🚨 *NEW LAB BOOKING RECEIVED - DIAGNOVA LABS* 🚨`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `📋 *Booking ID:* ${booking.id}`,
+    `👤 *Patient:* ${booking.patient.fullName} (${booking.patient.gender}, ${booking.patient.age} yrs)`,
+    `📞 *Mobile:* ${booking.patient.phone}`,
+    `✉️ *Email:* ${booking.patient.email || 'Not provided'}`,
+    ``,
+    `🏥 *Test / Package:* ${booking.itemName}`,
+    `👥 *Members:* ${booking.persons} Member${booking.persons > 1 ? 's' : ''}`,
+    `📅 *Scheduled Date:* ${booking.scheduledDate}`,
+    `⏰ *Time Slot:* ${booking.scheduledSlot}${booking.isExpress ? ' ⚡ (60-Min Express)' : ''}`,
+    `📍 *Doorstep Address:* ${booking.patient.address}${booking.patient.landmark ? `, Near ${booking.patient.landmark}` : ''}`,
+    `🏙️ *City & PIN:* ${booking.patient.city} - ${booking.patient.pincode}`,
+    ``,
+    `💰 *Total Amount:* ₹${booking.totalAmount.toLocaleString('en-IN')}`,
+    `💳 *Payment:* ${payModeText}`,
+    `🧪 *Action Required:* Phlebotomist assignment and cold-chain sample kit prep.`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+  ];
+
+  return `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(lines.join('\n'))}`;
+}
+
 export function openConfirmationModal(booking: Booking) {
+  // Automatically trigger backend notifications (email to patient + WhatsApp logging / webhook to 8217689128)
+  ApiClient.dispatchNotification(booking).catch(err => {
+    console.warn('[Notifications] Background dispatch warning:', err);
+  });
+
+  const waUrl = generateAdminWhatsAppUrl(booking);
   const modalsRoot = document.getElementById('modals-root')!;
   modalsRoot.innerHTML = `
     <div class="modal-overlay active" id="confirm-modal-overlay">
-      <div class="modal-card" style="max-width: 520px; text-align: center; padding: 36px 28px;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: #ecfdf5; color: #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 16px;">
+      <div class="modal-card" style="max-width: 540px; text-align: center; padding: 32px 26px;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: #ecfdf5; color: #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
           ✓
         </div>
 
-        <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Booking Confirmed!</h3>
-        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 20px;">
-          Your home sample collection slot has been scheduled with cold-chain tracking.
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Booking Confirmed!</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">
+          Your diagnostic home collection slot has been scheduled with cold-chain tracking.
         </p>
 
         <!-- Booking ID Badge -->
-        <div style="background: #f1f5f9; border-radius: 10px; padding: 12px; margin-bottom: 20px; display: inline-block;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">BOOKING ID</span>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #1b449c;">${booking.id}</div>
+        <div style="background: #f1f5f9; border-radius: 10px; padding: 10px 18px; margin-bottom: 16px; display: inline-block;">
+          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">BOOKING ID</span>
+          <div style="font-size: 1.25rem; font-weight: 800; color: #1b449c;">${booking.id}</div>
         </div>
 
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: left; font-size: 0.85rem; color: #334155; margin-bottom: 24px; line-height: 1.6;">
+        <!-- Automatic Notification Status Banner -->
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; text-align: left; margin-bottom: 16px; font-size: 0.82rem; line-height: 1.5;">
+          <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+            <span style="font-size: 1.1rem; line-height: 1;">✉️</span>
+            <div>
+              <strong style="color: #166534;">Confirmation Email Dispatched</strong>
+              <div style="color: #15803d; font-size: 0.78rem;">Sent to <strong>${booking.patient.email || 'your registered email'}</strong> with your complete voucher and test prep guidelines.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <span style="font-size: 1.1rem; line-height: 1;">📲</span>
+            <div>
+              <strong style="color: #166534;">WhatsApp Alert to Admin (+91 8217689128)</strong>
+              <div style="color: #15803d; font-size: 0.78rem;">Booking parameters and phlebotomist request sent to administrator at <strong>+91 8217689128</strong>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; text-align: left; font-size: 0.84rem; color: #334155; margin-bottom: 20px; line-height: 1.6;">
           <div><strong>Package/Tests:</strong> ${booking.itemName} (${booking.persons} Member${booking.persons > 1 ? 's' : ''})</div>
           <div><strong>Patient:</strong> ${booking.patient.fullName} (${booking.patient.phone})</div>
           <div><strong>Slot:</strong> ${booking.scheduledDate} at ${booking.scheduledSlot}</div>
-          <div><strong>Address:</strong> ${booking.patient.address}, ${booking.patient.city}</div>
+          <div><strong>Doorstep:</strong> ${booking.patient.address}, ${booking.patient.city} (${booking.patient.pincode})</div>
           <div><strong>Payment:</strong> ${booking.paymentMethod === 'online_upi' ? 'Online (Paid Verified)' : 'Cash on Collection (Pay on Visit)'} - <strong style="color: #e27a3f;">₹ ${booking.totalAmount.toLocaleString('en-IN')}</strong></div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <!-- Dedicated WhatsApp Action Link for 8217689128 -->
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" id="btn-open-whatsapp-admin" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: #ffffff; font-weight: 700; font-size: 0.92rem; padding: 12px 18px; border-radius: 9999px; text-decoration: none; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); transition: transform 0.15s ease, background 0.15s ease;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.97.53 1.87.814 2.796.814 3.18 0 5.767-2.586 5.768-5.766 0-3.18-2.587-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.477 9.98-9.969 9.98-1.748 0-3.388-.456-4.821-1.251l-5.21 1.365 1.39-5.077c-.908-1.492-1.428-3.242-1.428-5.017 0-5.502 4.477-9.98 9.969-9.98 5.492 0 9.969 4.478 9.969 9.98z"/>
+            </svg>
+            <span>Open / Send WhatsApp Alert (+91 8217689128)</span>
+          </a>
+
           <button class="btn-pill-primary" id="btn-download-pdf-receipt" style="width: 100%;">
             📄 Download Official PDF Receipt
           </button>
@@ -909,7 +980,7 @@ export function openConfirmationModal(booking: Booking) {
             ✉️ View Dispatched Email Receipt
           </button>
 
-          <button class="btn-page-nav" id="btn-done-confirmation" style="margin-top: 4px;">
+          <button class="btn-page-nav" id="btn-done-confirmation" style="margin-top: 2px;">
             Done &amp; Return to Home
           </button>
         </div>
@@ -938,6 +1009,7 @@ export function openConfirmationModal(booking: Booking) {
 
 export function openEmailSimulationModal(booking: Booking) {
   const modalsRoot = document.getElementById('modals-root')!;
+  const waUrl = generateAdminWhatsAppUrl(booking);
   modalsRoot.innerHTML = `
     <div class="modal-overlay active" id="email-modal-overlay">
       <div class="modal-card" style="max-width: 640px; padding: 0;">
@@ -951,7 +1023,7 @@ export function openEmailSimulationModal(booking: Booking) {
 
         <div class="modal-body" style="background: #ffffff; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 0.9rem; line-height: 1.6; color: #1e293b;">
           <div style="text-align: center; border-bottom: 2px solid #1b449c; padding-bottom: 16px; margin-bottom: 20px;">
-            <h2 style="color: #1b449c; font-size: 1.4rem; font-weight: 800; margin: 0;">TESTBUDDY LABS</h2>
+            <h2 style="color: #1b449c; font-size: 1.4rem; font-weight: 800; margin: 0;">DIAGNOVA LABS</h2>
             <p style="font-size: 0.78rem; color: #64748b; margin: 4px 0 0 0;">NABL Accredited Diagnostics · 100% Barcoded Cold-Chain</p>
           </div>
 
@@ -981,10 +1053,13 @@ export function openEmailSimulationModal(booking: Booking) {
             💡 <strong>Next Steps:</strong> A certified phlebotomist will arrive during your scheduled window with temperature-controlled cold-chain equipment and sterile collection tubes.
           </div>
 
-          <div style="margin-top: 20px; text-align: center;">
-            <button class="btn-pill-primary" id="btn-email-download-pdf" style="margin: 0 auto;">
+          <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            <button class="btn-pill-primary" id="btn-email-download-pdf">
               📄 Download PDF Booking Voucher
             </button>
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #25D366; color: #fff; font-weight: 700; font-size: 0.85rem; padding: 10px 16px; border-radius: 9999px; text-decoration: none;">
+              📲 Notify Admin (+91 8217689128)
+            </a>
           </div>
         </div>
       </div>

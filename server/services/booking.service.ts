@@ -1,6 +1,7 @@
 import { db } from './database.service';
 import { ServerPricingService } from './pricing.service';
 import { ServerSlotService } from './slot.service';
+import { NotificationService } from './notification.service';
 import { AppError } from '../middleware/errorHandler';
 import type { Booking, PatientInfo, CartItem } from '../../src/types';
 
@@ -121,6 +122,11 @@ export class ServerBookingService {
 
     // 5. Persist to Database
     await db.insertBooking(newBooking);
+
+    // 6. Asynchronously trigger Patient Email & Admin WhatsApp Notifications (+91 8217689128)
+    NotificationService.dispatchBookingNotifications(newBooking).catch(err => {
+      console.warn('⚠️ [ServerBookingService] Notification dispatch warning:', err);
+    });
 
     return newBooking;
   }

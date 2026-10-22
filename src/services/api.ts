@@ -137,4 +137,20 @@ export class ApiClient {
     // Seamless authoritative fallback so user NEVER experiences a crash
     return lookupPincode(clean);
   }
+
+  public static async dispatchNotification(booking: Booking): Promise<{ success: boolean; data?: any }> {
+    try {
+      const res = await fetch(`${API_BASE}/notifications/dispatch`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ booking })
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('[ApiClient] Notification dispatch call warning:', err);
+    }
+    return { success: false };
+  }
 }
