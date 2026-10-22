@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run --pool=threads",
+    "start": "tsx server/index.ts",
     "server": "tsx server/index.ts",
     "dev:server": "tsx watch server/index.ts",
     "dev:all": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"npm run dev\" \"npm run server\"",
@@ -21,7 +22,6 @@
     "@types/supertest": "^7.2.1",
     "concurrently": "^10.0.5",
     "supertest": "^7.3.1",
-    "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.3",
@@ -36,6 +36,7 @@
     "jspdf": "^4.2.1",
     "lucide": "^1.48.0",
     "nodemailer": "^10.2.0",
-    "razorpay": "^2.9.8"
+    "razorpay": "^2.9.8",
+    "tsx": "^4.23.15"
   }
 }
