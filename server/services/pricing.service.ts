@@ -76,7 +76,7 @@ export class ServerPricingService {
       const cartItems: CartItem[] = booking.items.map(i => ({
         id: i.id,
         itemType: i.itemType,
-        itemId: i.id,
+        itemId: (i as any).itemId || i.id,
         name: i.name,
         category: 'Diagnostic',
         price: i.price,

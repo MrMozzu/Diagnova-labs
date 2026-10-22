@@ -222,12 +222,107 @@ export class NotificationService {
   }
 
   /**
+   * Generates formatted Partner Lab & Operations Dispatch Ticket for diagnovalabs@gmail.com
+   */
+  public static generateDispatchTicketHtml(booking: Booking): string {
+    const isPaid = booking.paymentStatus === 'paid' || booking.paymentMethod === 'online_upi';
+    const cashDirective = isPaid
+      ? 'DO NOT COLLECT CASH - PREPAID ONLINE (VERIFIED)'
+      : `COLLECT INR ${booking.totalAmount.toLocaleString('en-IN')} IN CASH / UPI AT DOORSTEP`;
+    const cashDirectiveColor = isPaid ? '#166534' : '#9a3412';
+    const cashDirectiveBg = isPaid ? '#f0fdf4' : '#fff7ed';
+    const cashDirectiveBorder = isPaid ? '#bbf7d0' : '#fed7aa';
+
+    const plainTextSlip = [
+      `DIAGNOVA PHLEBOTOMIST DISPATCH SLIP`,
+      `Booking ID: ${booking.id}`,
+      `Patient: ${booking.patient.fullName} (${booking.patient.gender}, ${booking.patient.age} yrs)`,
+      `Phone: ${booking.patient.phone}`,
+      `Address: ${booking.patient.address}${booking.patient.landmark ? ', Near ' + booking.patient.landmark : ''}`,
+      `City & PIN: ${booking.patient.city} - ${booking.patient.pincode}`,
+      `Test / Package: ${booking.itemName}`,
+      `Date & Slot: ${booking.scheduledDate} | ${booking.scheduledSlot}`,
+      `Directive: ${cashDirective}`
+    ].join('\n');
+
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Lab Dispatch Ticket - ${booking.id}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f1f5f9; margin: 0; padding: 20px; color: #1e293b; }
+    .container { max-width: 640px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; }
+    .header { background: #0f172a; padding: 24px; color: #ffffff; text-align: center; }
+    .badge { display: inline-block; background: #2563eb; color: #ffffff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; text-transform: uppercase; }
+    .title { font-size: 20px; font-weight: 800; margin: 8px 0 0 0; }
+    .content { padding: 24px; }
+    .directive-box { background: ${cashDirectiveBg}; border: 1.5px solid ${cashDirectiveBorder}; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; color: ${cashDirectiveColor}; font-weight: 700; font-size: 14px; text-align: center; }
+    .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .section-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+    .row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+    .label { color: #64748b; }
+    .val { color: #0f172a; font-weight: 600; text-align: right; }
+    .copy-box { background: #0f172a; color: #38bdf8; padding: 14px; border-radius: 8px; font-family: monospace; font-size: 12px; white-space: pre-wrap; word-break: break-all; margin-top: 8px; }
+    .footer { background: #f8fafc; padding: 16px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge">OPERATIONS DISPATCH TICKET</div>
+      <div class="title">Partner Lab Sample Collection Order</div>
+      <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Booking ID: ${booking.id}</div>
+    </div>
+
+    <div class="content">
+      <div class="directive-box">
+        PHLEBOTOMIST CASH DIRECTIVE: ${cashDirective}
+      </div>
+
+      <div class="section">
+        <div class="section-title">Patient &amp; Doorstep Details</div>
+        <div class="row"><span class="label">Patient Name:</span><span class="val">${booking.patient.fullName} (${booking.patient.gender}, ${booking.patient.age}y)</span></div>
+        <div class="row"><span class="label">Mobile Phone:</span><span class="val"><a href="tel:${booking.patient.phone}" style="color: #2563eb;">${booking.patient.phone}</a></span></div>
+        <div class="row"><span class="label">Email:</span><span class="val">${booking.patient.email || 'Not provided'}</span></div>
+        <div class="row"><span class="label">Scheduled Date:</span><span class="val">${booking.scheduledDate}</span></div>
+        <div class="row"><span class="label">Arrival Window:</span><span class="val">${booking.scheduledSlot}</span></div>
+        <div class="row"><span class="label">Address:</span><span class="val">${booking.patient.address}${booking.patient.landmark ? ', Near ' + booking.patient.landmark : ''}</span></div>
+        <div class="row"><span class="label">City &amp; PIN:</span><span class="val">${booking.patient.city} - ${booking.patient.pincode}</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Clinical Order Summary</div>
+        <div class="row"><span class="label">Test / Package:</span><span class="val">${booking.itemName}</span></div>
+        <div class="row"><span class="label">Total Amount:</span><span class="val">INR ${booking.totalAmount.toLocaleString('en-IN')}</span></div>
+        <div class="row"><span class="label">Payment Status:</span><span class="val">${isPaid ? 'Paid Online' : 'Pay on Collection'}</span></div>
+        <div class="row"><span class="label">Assigned Phlebotomist:</span><span class="val">${booking.phlebotomist?.name || 'To Be Assigned'}</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Copy-Paste Dispatch Slip for Phlebotomist / Partner Lab</div>
+        <div class="copy-box">${plainTextSlip}</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Diagnova Labs Operations Concierge · Automated Operations Notification
+    </div>
+  </div>
+</body>
+</html>
+    `;
+  }
+
+  /**
    * Dispatches confirmation email to patient
    */
   public static async sendPatientConfirmationEmail(booking: Booking): Promise<{ success: boolean; messageId?: string; simulated?: boolean }> {
     const toEmail = booking.patient.email;
     if (!toEmail) {
-      console.log(`ℹ️ [NotificationService] Patient did not provide email for booking ${booking.id}, skipping email dispatch.`);
+      console.log(`[NotificationService] Patient did not provide email for booking ${booking.id}, skipping email dispatch.`);
       return { success: false };
     }
 
@@ -243,43 +338,75 @@ export class NotificationService {
           subject,
           html
         });
-        console.log(`✅ [NotificationService] Real email dispatched to ${toEmail}. Message ID: ${info.messageId}`);
+        console.log(`[NotificationService] Patient confirmation email dispatched to ${toEmail}. Message ID: ${info.messageId}`);
         return { success: true, messageId: info.messageId };
       } catch (err) {
-        console.error(`❌ [NotificationService] Error sending email via SMTP:`, err);
+        console.error(`[NotificationService] Error sending patient confirmation email via SMTP:`, err);
       }
     }
 
-    // Safe simulation mode when SMTP not yet provided in .env
-    console.log(`\n📧 ============================================================`);
-    console.log(`📧 [EMAIL CONFIRMATION] DISPATCHED TO: ${toEmail}`);
-    console.log(`📧 [SUBJECT] ${subject}`);
-    console.log(`📧 [STATUS] Ready (Configure SMTP in .env for production mail delivery)`);
-    console.log(`📧 ============================================================\n`);
+    console.log(`\n[EMAIL CONFIRMATION] DISPATCHED TO: ${toEmail}`);
+    console.log(`[SUBJECT] ${subject}\n`);
 
     return { success: true, simulated: true };
   }
 
   /**
-   * Dispatches both Patient Email and Admin WhatsApp Alert concurrently
+   * Dispatches Partner Lab Dispatch Ticket to Operations Team (diagnovalabs@gmail.com)
+   */
+  public static async sendOperationsDispatchEmail(booking: Booking): Promise<{ success: boolean; messageId?: string; simulated?: boolean }> {
+    const operationsEmail = config.notifications.smtp.user || 'diagnovalabs@gmail.com';
+    const html = this.generateDispatchTicketHtml(booking);
+    const subject = `[DISPATCH TICKET] New Booking ${booking.id} - ${booking.itemName} | ${booking.patient.city}`;
+    const transporter = this.getTransporter();
+
+    if (transporter) {
+      try {
+        const info = await transporter.sendMail({
+          from: config.notifications.smtp.from,
+          to: operationsEmail,
+          subject,
+          html
+        });
+        console.log(`[NotificationService] Operations dispatch ticket sent to ${operationsEmail}. Message ID: ${info.messageId}`);
+        return { success: true, messageId: info.messageId };
+      } catch (err) {
+        console.error(`[NotificationService] Error sending operations dispatch ticket via SMTP:`, err);
+      }
+    }
+
+    console.log(`\n[OPERATIONS DISPATCH TICKET] DISPATCHED TO: ${operationsEmail}`);
+    console.log(`[SUBJECT] ${subject}\n`);
+
+    return { success: true, simulated: true };
+  }
+
+  /**
+   * Dispatches Patient Email, Operations Dispatch Ticket, and Admin WhatsApp Alert concurrently
    */
   public static async dispatchBookingNotifications(booking: Booking): Promise<{
     email: { success: boolean; simulated?: boolean };
+    operationsEmail: { success: boolean; simulated?: boolean };
     whatsapp: { success: boolean; link: string };
   }> {
-    const [emailRes, waRes] = await Promise.all([
+    const [emailRes, opsRes, waRes] = await Promise.all([
       this.sendPatientConfirmationEmail(booking).catch(err => {
-        console.warn('⚠️ Email dispatch error:', err);
+        console.warn('Patient email dispatch error:', err);
+        return { success: false };
+      }),
+      this.sendOperationsDispatchEmail(booking).catch(err => {
+        console.warn('Operations email dispatch error:', err);
         return { success: false };
       }),
       this.sendAdminWhatsAppAlert(booking).catch(err => {
-        console.warn('⚠️ WhatsApp alert dispatch error:', err);
+        console.warn('WhatsApp alert dispatch error:', err);
         return { success: false, link: this.getWhatsAppDeepLink(booking) };
       })
     ]);
 
     return {
       email: emailRes,
+      operationsEmail: opsRes,
       whatsapp: waRes
     };
   }
