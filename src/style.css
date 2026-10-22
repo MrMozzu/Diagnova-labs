@@ -3608,66 +3608,76 @@ img {
    ========================================================================== */
 @media (max-width: 768px) {
   .packages-comparison-card {
-    padding: 16px 12px;
-    margin-top: 36px;
-    border-radius: 14px;
+    padding: 12px 8px;
+    margin-top: 28px;
+    border-radius: 12px;
   }
 
   .packages-comparison-card h3 {
-    font-size: 1.15rem !important;
+    font-size: 1.05rem !important;
+    margin-bottom: 4px !important;
   }
 
   .packages-comparison-card p {
-    font-size: 0.78rem !important;
-    line-height: 1.4;
+    font-size: 0.72rem !important;
+    line-height: 1.35;
+  }
+
+  .packages-comparison-card .section-eyebrow {
+    font-size: 0.65rem !important;
   }
 
   .mobile-table-scroll-hint {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
+    font-size: 0.64rem;
+    padding: 4px 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .comparison-table-wrapper {
-    margin-top: 10px;
+    margin-top: 6px;
     -webkit-overflow-scrolling: touch;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid #e2e8f0;
     position: relative;
   }
 
   .comparison-table {
-    font-size: 0.74rem;
+    font-size: 0.65rem;
   }
 
   .comparison-table th,
   .comparison-table td {
-    padding: 8px 10px;
-    font-size: 0.72rem;
-    line-height: 1.35;
+    padding: 6px 7px;
+    font-size: 0.64rem;
+    line-height: 1.3;
   }
 
   .comparison-table th {
-    font-size: 0.76rem;
-    padding: 10px 8px;
+    font-size: 0.68rem;
+    padding: 8px 6px;
   }
 
   .comparison-table th [style*="font-size: 0.72rem"] {
-    font-size: 0.62rem !important;
+    font-size: 0.54rem !important;
+    margin-bottom: 2px !important;
   }
 
   .comparison-table th [style*="font-weight: 800; color: #0f172a"] {
-    font-size: 0.75rem !important;
-    line-height: 1.25;
+    font-size: 0.67rem !important;
+    line-height: 1.2;
   }
 
   /* Pinned / Sticky first column on mobile for effortless comparison */
   .comparison-table th:first-child,
   .comparison-table td:first-child {
-    min-width: 115px !important;
-    max-width: 125px;
-    font-size: 0.73rem;
+    min-width: 95px !important;
+    max-width: 105px;
+    font-size: 0.64rem;
     font-weight: 700;
     position: sticky;
     left: 0;
@@ -3683,58 +3693,82 @@ img {
 
   .comparison-table th:not(:first-child),
   .comparison-table td:not(:first-child) {
-    min-width: 130px !important;
+    min-width: 105px !important;
+    max-width: 115px;
   }
 
   .comparison-table td [style*="font-size: 1rem"] {
-    font-size: 0.82rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .comparison-table td [style*="font-weight: 700"] {
+    font-size: 0.64rem !important;
+  }
+
+  .table-price-cell {
+    gap: 2px;
   }
 
   .table-price-val {
-    font-size: 0.94rem;
-    gap: 4px;
+    font-size: 0.82rem;
+    gap: 3px;
   }
 
   .table-mrp-val {
-    font-size: 0.68rem;
+    font-size: 0.60rem;
   }
 
   .table-discount-tag {
-    font-size: 0.60rem;
-    padding: 1px 4px;
+    font-size: 0.54rem;
+    padding: 1px 3px;
   }
 
   .btn-table-book {
-    font-size: 0.70rem;
-    padding: 6px 12px;
-    margin-top: 4px;
-    gap: 4px;
+    font-size: 0.62rem;
+    padding: 4px 9px;
+    margin-top: 3px;
+    gap: 3px;
+    border-radius: 9999px;
   }
 }
 
 @media (max-width: 480px) {
   .packages-comparison-card {
-    padding: 14px 8px;
-    margin-left: -4px;
-    margin-right: -4px;
-    border-radius: 12px;
+    padding: 10px 6px;
+    margin-left: -6px;
+    margin-right: -6px;
+    border-radius: 10px;
   }
 
   .comparison-table th,
   .comparison-table td {
-    padding: 7px 6px;
-    font-size: 0.70rem;
+    padding: 5px 5px;
+    font-size: 0.61rem;
+    line-height: 1.25;
   }
 
   .comparison-table th:first-child,
   .comparison-table td:first-child {
-    min-width: 105px !important;
-    font-size: 0.70rem;
+    min-width: 86px !important;
+    max-width: 94px;
+    font-size: 0.61rem;
+    padding: 5px 5px;
   }
 
   .comparison-table th:not(:first-child),
   .comparison-table td:not(:first-child) {
-    min-width: 118px !important;
+    min-width: 94px !important;
+    max-width: 102px;
+    padding: 5px 4px;
+  }
+
+  .table-price-val {
+    font-size: 0.76rem;
+  }
+
+  .btn-table-book {
+    font-size: 0.58rem;
+    padding: 3px 7px;
   }
 }
 
