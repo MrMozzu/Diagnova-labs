@@ -368,7 +368,7 @@ class AppStore {
     if (supabase) {
       try {
         // Insert patient first
-        const { data: patientRecord } = await supabase
+        const { data: patientRecord, error: pError } = await supabase
           .from('patients')
           .insert({
             full_name: params.patient.fullName,
@@ -384,14 +384,21 @@ class AppStore {
           .select('id')
           .single();
 
+        if (pError) {
+          console.warn('[store] Supabase direct patient insert failed (check RLS):', pError.message);
+        }
+
+        const isUuid = (val?: string) => !!val && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
+        const safeItemId = isUuid(params.itemId) ? params.itemId : null;
+
         // Insert booking record
-        await supabase
+        const { error: bError } = await supabase
           .from('bookings')
           .insert({
             id: bookingId,
-            patient_id: patientRecord?.id,
+            patient_id: patientRecord?.id || null,
             booking_type: params.itemType,
-            item_id: params.itemId,
+            item_id: safeItemId,
             item_name: params.itemName,
             number_of_persons: params.persons,
             scheduled_date: params.scheduledDate,
@@ -407,6 +414,12 @@ class AppStore {
             phlebotomist_name: newBooking.phlebotomist?.name,
             phlebotomist_phone: newBooking.phlebotomist?.phone
           });
+
+        if (bError) {
+          console.warn('[store] Supabase direct booking insert failed (check RLS):', bError.message);
+        } else {
+          console.log(`[store] Booking ${bookingId} synced to Supabase.`);
+        }
       } catch (err) {
         console.warn('Supabase booking sync error:', err);
       }

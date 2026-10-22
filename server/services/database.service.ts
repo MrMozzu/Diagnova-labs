@@ -177,7 +177,7 @@ export class DatabaseService {
     // 2. Synchronous/Async write to Supabase if available
     if (this.supabase) {
       try {
-        const { data: patientRecord } = await this.supabase
+        const { data: patientRecord, error: pError } = await this.supabase
           .from('patients')
           .insert({
             full_name: booking.patient.fullName,
@@ -193,11 +193,18 @@ export class DatabaseService {
           .select('id')
           .single();
 
-        await this.supabase.from('bookings').insert({
+        if (pError) {
+          console.warn('[DatabaseService] Supabase patient insert failed (check RLS policy):', pError.message);
+        }
+
+        const isUuid = (val?: string) => !!val && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
+        const safeItemId = isUuid(booking.itemId) ? booking.itemId : null;
+
+        const { error: bError } = await this.supabase.from('bookings').insert({
           id: booking.id,
-          patient_id: patientRecord?.id,
+          patient_id: patientRecord?.id || null,
           booking_type: booking.itemType,
-          item_id: booking.itemId,
+          item_id: safeItemId,
           item_name: booking.itemName,
           number_of_persons: booking.persons,
           scheduled_date: booking.scheduledDate,
@@ -213,8 +220,14 @@ export class DatabaseService {
           phlebotomist_name: booking.phlebotomist?.name,
           phlebotomist_phone: booking.phlebotomist?.phone
         });
-      } catch (e) {
-        console.warn('⚠️ [DatabaseService] Supabase insert warning:', e);
+
+        if (bError) {
+          console.warn('[DatabaseService] Supabase booking insert failed (check RLS policy):', bError.message);
+        } else {
+          console.log(`[DatabaseService] Booking ${booking.id} synced to Supabase successfully.`);
+        }
+      } catch (e: any) {
+        console.warn('[DatabaseService] Supabase sync unexpected error:', e.message || e);
       }
     }
 
