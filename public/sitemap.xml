@@ -1,21 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage & Doorstep Sample Collection Service -->
   <url>
-    <loc>https://diagnova-labs.vercel.app/</loc>
-    <lastmod>2026-10-13</lastmod>
+    <loc>https://www.diagnovalabs.com/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.diagnovalabs.com/hero-doctor.jpg</image:loc>
+      <image:title>Diagnova Labs Clinical Pathology and Doorstep Collection</image:title>
+      <image:caption>NABL accredited diagnostic blood tests and full body checkup service with 60-minute doorstep sample collection.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.diagnovalabs.com/phone-report.jpg</image:loc>
+      <image:title>Digital NABL Lab Reports on WhatsApp and Email</image:title>
+      <image:caption>Instant digital smart health reports with clinical insights delivered to patient smartphone.</image:caption>
+    </image:image>
   </url>
+
+  <!-- Preventive Health Checkup Packages -->
   <url>
-    <loc>https://diagnova-labs.vercel.app/#/tests</loc>
-    <lastmod>2026-10-13</lastmod>
+    <loc>https://www.diagnovalabs.com/#/packages</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Comprehensive Test Catalog & Pathology Directory -->
   <url>
-    <loc>https://diagnova-labs.vercel.app/#/packages</loc>
-    <lastmod>2026-10-13</lastmod>
+    <loc>https://www.diagnovalabs.com/#/tests</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Flagship Health Packages Deep Links -->
+  <url>
+    <loc>https://www.diagnovalabs.com/#packages-section?pkg=healthy-india-2026</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.diagnovalabs.com/#packages-section?pkg=be-healthy-comprehensive</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.diagnovalabs.com/#packages-section?pkg=diabetic-checkup-prime</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.diagnovalabs.com/#packages-section?pkg=life-maximiser-plus</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

@@ -114,6 +114,33 @@ function renderRouteView() {
   container.innerHTML = getCurrentRouteViewHtml();
   bindCurrentRouteEvents();
   updateCartBadges();
+  updateSeoMetadata(currentRoute);
+}
+
+function updateSeoMetadata(route: AppRoute) {
+  const descMeta = document.querySelector('meta[name="description"]');
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+
+  if (route === 'packages') {
+    document.title = 'Preventive Health Checkup Packages | Diagnova Labs';
+    const text = 'Compare comprehensive full body health packages, master health checks, and diabetes screening with 60-min doorstep sample collection.';
+    if (descMeta) descMeta.setAttribute('content', text);
+    if (ogTitle) ogTitle.setAttribute('content', 'Preventive Health Checkup Packages | Diagnova Labs');
+    if (ogDesc) ogDesc.setAttribute('content', text);
+  } else if (route === 'tests') {
+    document.title = 'Diagnostic Blood Tests & Pathology Directory | Diagnova Labs';
+    const text = 'Book essential diagnostic blood tests online: CBC, HbA1c, Thyroid profile, Liver & Kidney panels with NABL certified accuracy.';
+    if (descMeta) descMeta.setAttribute('content', text);
+    if (ogTitle) ogTitle.setAttribute('content', 'Diagnostic Blood Tests & Pathology Directory | Diagnova Labs');
+    if (ogDesc) ogDesc.setAttribute('content', text);
+  } else {
+    document.title = 'Diagnova Labs | Better Health Starts With Better Diagnosis';
+    const text = 'Book Healthy India 2026 Full Body Checkup, Be Healthy Comprehensive packages, and essential clinical blood tests online with 60-minute doorstep sample collection. Fast, accurate, and NABL accredited.';
+    if (descMeta) descMeta.setAttribute('content', text);
+    if (ogTitle) ogTitle.setAttribute('content', 'Diagnova Labs | Better Health Starts With Better Diagnosis');
+    if (ogDesc) ogDesc.setAttribute('content', text);
+  }
 }
 
 function getFilteredPackages(filter: string): PackageItem[] {

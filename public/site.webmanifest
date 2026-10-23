@@ -1,0 +1,17 @@
+{
+  "name": "Diagnova Labs",
+  "short_name": "Diagnova",
+  "description": "Better Diagnosis. Healthier Tomorrow. Book certified full body checkups and blood tests online with doorstep sample collection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1b449c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

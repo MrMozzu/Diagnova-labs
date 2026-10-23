@@ -1,0 +1,20 @@
+# Diagnova Labs
+
+> Better Diagnosis. Healthier Tomorrow.
+
+Diagnova Labs is an enterprise diagnostic pathology and home sample collection service. We provide NABL accredited clinical laboratory testing, full-body health evaluations, and preventative checkup packages across India.
+
+## Core Clinical Offerings
+
+- **Doorstep Sample Collection**: 60-minute arrival window with temperature-controlled cold-chain phlebotomy.
+- **Flagship Packages**:
+  - Healthy India 2026 Full Body Checkup Advance Plus (92 parameters including CBC, LFT, KFT, Lipid Profile, Thyroid, HbA1c, and Urine).
+  - Be Healthy Comprehensive Health Package (with HbA1c & Vitamin D/B12).
+  - Diagnova Diabetic Checkup Prime.
+  - Life Maximiser Male / Female Executive Packages.
+- **Pathology Test Directory**: Individual tests covering Complete Blood Count (CBC), Fasting Blood Glucose, HbA1c, Lipid Profile, Thyroid Profile (T3, T4, TSH), Liver Function (LFT), Kidney Function (KFT), Vitamin D3, and Vitamin B12.
+- **Accreditation**: 100% NABL & ICMR compliant reference pathology processing.
+- **Turnaround Time**: Standard reports in 6 to 24 hours delivered electronically via WhatsApp and Email.
+- **Official Website**: https://www.diagnovalabs.com
+- **Customer Helpline**: 1800-8378-283
+- **Primary Support Email**: diagnovalabs@gmail.com
