@@ -41,7 +41,14 @@ export const config = {
       pass: (process.env.SMTP_PASS || '').replace(/\s+/g, ''),
       from: process.env.SMTP_FROM || '"Diagnova Labs" <diagnovalabs@gmail.com>'
     },
-    whatsappWebhookUrl: process.env.WHATSAPP_WEBHOOK_URL || ''
+    whatsappWebhookUrl: process.env.WHATSAPP_WEBHOOK_URL || '',
+    gmailRelayUrl: (
+      process.env.GMAIL_RELAY_URL ||
+      process.env.GOOGLE_APPS_SCRIPT_URL ||
+      process.env.GMAIL_WEBHOOK_URL ||
+      ''
+    ).trim(),
+    gmailRelaySecret: (process.env.GMAIL_RELAY_SECRET || 'diagnova_secure_mail_key_2026').trim()
   },
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID || '',

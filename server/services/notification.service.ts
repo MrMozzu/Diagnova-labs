@@ -18,7 +18,10 @@ export class NotificationService {
             auth: {
               user: smtp.user,
               pass: smtp.pass
-            }
+            },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 5000
           }
           : {
             host: smtp.host,
@@ -27,7 +30,10 @@ export class NotificationService {
             auth: {
               user: smtp.user,
               pass: smtp.pass
-            }
+            },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 5000
           };
 
         this.transporter = nodemailer.createTransport(transportOpts);
@@ -317,6 +323,64 @@ export class NotificationService {
   }
 
   /**
+   * Dispatches email via Google Apps Script HTTPS Relay (Port 443 - bypasses all cloud SMTP port restrictions)
+   */
+  public static async sendViaGmailRelay(options: {
+    to: string;
+    subject: string;
+    html: string;
+    plainText?: string;
+  }): Promise<{ success: boolean; messageId?: string } | null> {
+    const relayUrl = config.notifications.gmailRelayUrl;
+    if (!relayUrl) return null;
+
+    try {
+      console.log(`[NotificationService] Sending email to ${options.to} via Google Apps Script HTTPS Relay...`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
+      const res = await fetch(relayUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          secret: config.notifications.gmailRelaySecret,
+          to: options.to,
+          subject: options.subject,
+          html: options.html,
+          plainText: options.plainText || ''
+        }),
+        signal: controller.signal,
+        redirect: 'follow'
+      });
+
+      clearTimeout(timeoutId);
+
+      const text = await res.text();
+      let data: any = null;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        // Fallback for non-JSON text responses
+      }
+
+      if (data && data.success) {
+        console.log(`[NotificationService] Email successfully delivered to ${options.to} via Google Apps Script Relay.`);
+        return { success: true, messageId: `gas-${Date.now()}` };
+      } else if (res.ok) {
+        console.log(`[NotificationService] Google Apps Script relay responded HTTP ${res.status}. Output: ${text.substring(0, 100)}`);
+        return { success: true, messageId: `gas-${Date.now()}` };
+      } else {
+        console.warn(`[NotificationService] Google Apps Script relay returned error:`, text);
+      }
+    } catch (err: any) {
+      console.warn(`[NotificationService] Error contacting Google Apps Script relay:`, err.message || err);
+    }
+    return null;
+  }
+
+  /**
    * Dispatches confirmation email to patient
    */
   public static async sendPatientConfirmationEmail(booking: Booking): Promise<{ success: boolean; messageId?: string; simulated?: boolean }> {
@@ -328,8 +392,19 @@ export class NotificationService {
 
     const html = this.generateEmailHtml(booking);
     const subject = `Booking Confirmation - ${booking.itemName} [${booking.id}] | Diagnova Labs`;
-    const transporter = this.getTransporter();
 
+    // 1. Try Google Apps Script HTTPS Relay first (Runs over port 443, immune to cloud SMTP blocks)
+    const relayRes = await this.sendViaGmailRelay({
+      to: toEmail,
+      subject,
+      html
+    });
+    if (relayRes?.success) {
+      return relayRes;
+    }
+
+    // 2. Fall back to SMTP
+    const transporter = this.getTransporter();
     if (transporter) {
       try {
         const info = await transporter.sendMail({
@@ -358,8 +433,19 @@ export class NotificationService {
     const operationsEmail = config.notifications.smtp.user || 'diagnovalabs@gmail.com';
     const html = this.generateDispatchTicketHtml(booking);
     const subject = `[DISPATCH TICKET] New Booking ${booking.id} - ${booking.itemName} | ${booking.patient.city}`;
-    const transporter = this.getTransporter();
 
+    // 1. Try Google Apps Script HTTPS Relay first (Runs over port 443, immune to cloud SMTP blocks)
+    const relayRes = await this.sendViaGmailRelay({
+      to: operationsEmail,
+      subject,
+      html
+    });
+    if (relayRes?.success) {
+      return relayRes;
+    }
+
+    // 2. Fall back to SMTP
+    const transporter = this.getTransporter();
     if (transporter) {
       try {
         const info = await transporter.sendMail({
