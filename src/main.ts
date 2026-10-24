@@ -141,6 +141,15 @@ function updateSeoMetadata(route: AppRoute) {
     if (ogTitle) ogTitle.setAttribute('content', 'Diagnova Labs | Better Health Starts With Better Diagnosis');
     if (ogDesc) ogDesc.setAttribute('content', text);
   }
+
+  // Dispatch page_view to Google Analytics (gtag) on SPA navigation
+  if (typeof (window as any).gtag === 'function') {
+    (window as any).gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname + window.location.hash
+    });
+  }
 }
 
 function getFilteredPackages(filter: string): PackageItem[] {
